@@ -1,0 +1,14 @@
+---
+  environment: production
+  chdir: . # just for now, for production: /usr/share/jboss-cloud-management
+  address: 0.0.0.0
+  user: thin
+  group: thin
+  port: 4545
+  pid: /var/lock/jboss-cloud-management.pid
+  rackup: config.ru
+  log: /var/log/messages/jboss-cloud-management.log
+  max_conns: 100
+  timeout: 30
+  max_persistent_conns: 100
+  daemonize: false

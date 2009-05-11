@@ -1,0 +1,351 @@
+# All times in this file are in UTC (GMT), not your local timezone.   This is
+# not a bug, so please don't ask about it.   There is no portable way to
+# store leases in the local timezone, so please don't request this as a
+# feature.   If this is inconvenient or confusing to you, we sincerely
+# apologize.   Seriously, though - don't ask.
+# The format of this file is documented in the dhcpd.leases(5) manual page.
+# This lease file was written by isc-dhcp-V3.0.5-RedHat
+
+lease 192.168.1.99 {
+  starts 1 2008/09/29 17:39:33;
+  ends 2 2008/09/30 17:39:33;
+  tstp 2 2008/09/30 17:39:33;
+  binding state free;
+  hardware ethernet 00:1d:72:26:69:64;
+  uid "\001\000\035r&id";
+}
+lease 192.168.1.97 {
+  starts 3 2008/11/26 11:44:31;
+  ends 4 2008/11/27 11:44:31;
+  tstp 4 2008/11/27 11:44:31;
+  binding state free;
+  hardware ethernet 00:18:8b:b8:b7:f2;
+  uid "\001\000\030\213\270\267\362";
+}
+lease 192.168.1.95 {
+  starts 2 2009/01/06 18:56:41;
+  ends 3 2009/01/07 18:56:41;
+  tstp 3 2009/01/07 18:56:41;
+  binding state free;
+  hardware ethernet 00:c0:02:c3:aa:25;
+  uid "\001\000\300\002\303\252%";
+}
+lease 192.168.1.94 {
+  starts 4 2009/02/12 10:04:49;
+  ends 5 2009/02/13 10:04:49;
+  tstp 5 2009/02/13 10:04:49;
+  binding state free;
+  hardware ethernet 00:1b:24:bb:f5:59;
+  uid "\001\000\033$\273\365Y";
+}
+lease 192.168.1.92 {
+  starts 3 2009/03/18 20:08:11;
+  ends 3 2009/03/18 20:11:03;
+  tstp 3 2009/03/18 20:11:03;
+  binding state free;
+  hardware ethernet 00:0c:76:40:12:19;
+  uid "\001\000\014v@\022\031";
+}
+lease 192.168.1.98 {
+  starts 4 2009/04/16 03:39:15;
+  ends 4 2009/04/16 03:41:15;
+  binding state free;
+  hardware ethernet 00:00:00:00:00:00;
+}
+lease 192.168.1.96 {
+  starts 1 2009/05/04 12:23:07;
+  ends 2 2009/05/05 12:23:07;
+  tstp 2 2009/05/05 12:23:07;
+  binding state free;
+  hardware ethernet 00:1d:72:22:e0:26;
+  uid "\001\000\035r\"\340&";
+}
+lease 192.168.1.93 {
+  starts 2 2009/05/05 10:41:34;
+  ends 3 2009/05/06 10:41:34;
+  tstp 3 2009/05/06 10:41:34;
+  binding state free;
+  hardware ethernet 00:1f:e2:1c:16:f7;
+  uid "\001\000\037\342\034\026\367";
+}
+lease 192.168.1.100 {
+  starts 4 2009/05/07 11:59:22;
+  ends 5 2009/05/08 11:59:22;
+  binding state active;
+  next binding state free;
+  hardware ethernet 00:1a:4b:60:e5:5d;
+  uid "\001\000\032K`\345]";
+}
+lease 192.168.3.100 {
+  starts 0 2008/09/28 17:11:09;
+  ends 1 2008/09/29 17:11:09;
+  tstp 1 2008/09/29 17:11:09;
+  binding state free;
+  hardware ethernet 00:17:a4:d6:3f:e1;
+}
+lease 192.168.3.91 {
+  starts 1 2008/12/08 18:27:57;
+  ends 2 2008/12/09 07:57:14;
+  tstp 2 2008/12/09 07:57:14;
+  binding state free;
+  hardware ethernet 00:30:1b:26:60:16;
+  uid "\001\0000\033&`\026";
+}
+lease 192.168.3.92 {
+  starts 2 2009/01/13 09:21:18;
+  ends 3 2009/01/14 09:21:18;
+  tstp 3 2009/01/14 09:21:18;
+  binding state free;
+  hardware ethernet 00:00:00:1f:d6:fe;
+  uid "\001\000\000\000\037\326\376";
+}
+lease 192.168.3.83 {
+  starts 4 2009/01/22 09:46:18;
+  ends 5 2009/01/23 09:46:18;
+  tstp 5 2009/01/23 09:46:18;
+  binding state free;
+  hardware ethernet 00:b0:d0:64:a2:43;
+  uid "\001\000\260\320d\242C";
+}
+lease 192.168.3.95 {
+  starts 1 2009/01/26 09:29:12;
+  ends 2 2009/01/27 09:29:12;
+  tstp 2 2009/01/27 09:29:12;
+  binding state free;
+  hardware ethernet 00:00:00:1f:d6:fe;
+  uid "\001\000\000\000\037\326\376";
+}
+lease 192.168.3.87 {
+  starts 3 2009/01/28 09:19:39;
+  ends 4 2009/01/29 09:19:39;
+  tstp 4 2009/01/29 09:19:39;
+  binding state free;
+  hardware ethernet 00:00:00:00:c6:34;
+  uid "\001\000\000\000\000\3064";
+}
+lease 192.168.3.96 {
+  starts 4 2009/02/19 16:48:59;
+  ends 5 2009/02/20 16:48:59;
+  tstp 5 2009/02/20 16:48:59;
+  binding state free;
+  hardware ethernet 00:1d:60:c8:16:b3;
+  uid "\001\000\035`\310\026\263";
+}
+lease 192.168.3.88 {
+  starts 1 2009/03/02 09:20:54;
+  ends 2 2009/03/03 09:20:54;
+  tstp 2 2009/03/03 09:20:54;
+  binding state free;
+  hardware ethernet 00:00:00:1f:d6:fe;
+  uid "\001\000\000\000\037\326\376";
+}
+lease 192.168.3.73 {
+  starts 2 2009/03/03 19:34:00;
+  ends 3 2009/03/04 19:34:00;
+  tstp 3 2009/03/04 19:34:00;
+  binding state free;
+  hardware ethernet 00:c0:df:13:27:98;
+  uid "\001\000\300\337\023'\230";
+}
+lease 192.168.3.72 {
+  starts 3 2009/03/04 11:30:57;
+  ends 4 2009/03/05 11:30:57;
+  tstp 4 2009/03/05 11:30:57;
+  binding state free;
+  hardware ethernet 00:00:00:1f:00:00;
+  uid "\001\000\000\000\037\000\000";
+}
+lease 192.168.3.97 {
+  starts 5 2009/03/06 09:20:39;
+  ends 5 2009/03/06 09:22:39;
+  tstp 5 2009/03/06 09:22:39;
+  binding state free;
+  hardware ethernet 00:1f:c6:34:00:00;
+  uid "\001\000\037\3064\000\000";
+  client-hostname "pc1";
+}
+lease 192.168.3.98 {
+  starts 5 2009/03/06 09:20:40;
+  ends 5 2009/03/06 09:22:40;
+  tstp 5 2009/03/06 09:22:40;
+  binding state free;
+  hardware ethernet 00:1f:c6:34:00:00;
+  uid "\001\000\037\3064\000\000";
+  client-hostname "pc1";
+}
+lease 192.168.3.90 {
+  starts 5 2009/03/06 09:20:42;
+  ends 6 2009/03/07 09:20:42;
+  tstp 6 2009/03/07 09:20:42;
+  binding state free;
+  hardware ethernet 00:1f:c6:34:00:00;
+  uid "\001\000\037\3064\000\000";
+}
+lease 192.168.3.94 {
+  starts 1 2009/03/09 09:20:07;
+  ends 2 2009/03/10 09:20:07;
+  tstp 2 2009/03/10 09:20:07;
+  binding state free;
+  hardware ethernet 00:1f:00:00:c6:34;
+  uid "\001\000\037\000\000\3064";
+}
+lease 192.168.3.93 {
+  starts 4 2009/03/12 09:49:25;
+  ends 4 2009/03/12 09:51:25;
+  tstp 4 2009/03/12 09:51:25;
+  binding state free;
+  hardware ethernet 00:00:c6:34:d6:fe;
+  uid "\001\000\000\3064\326\376";
+  client-hostname "pc1";
+}
+lease 192.168.3.77 {
+  starts 4 2009/03/12 09:24:38;
+  ends 5 2009/03/13 09:24:38;
+  tstp 5 2009/03/13 09:24:38;
+  binding state free;
+  hardware ethernet 00:30:05:ec:5a:f8;
+  uid "\001\0000\005\354Z\370";
+}
+lease 192.168.3.75 {
+  starts 4 2009/03/12 09:36:52;
+  ends 5 2009/03/13 09:36:52;
+  tstp 5 2009/03/13 09:36:52;
+  binding state free;
+  hardware ethernet 00:13:d3:a2:63:a9;
+  uid "\001\000\023\323\242c\251";
+}
+lease 192.168.3.76 {
+  starts 4 2009/03/12 09:37:22;
+  ends 5 2009/03/13 09:37:22;
+  tstp 5 2009/03/13 09:37:22;
+  binding state free;
+  hardware ethernet 00:16:41:2d:9f:c7;
+  uid "\001\000\026A-\237\307";
+}
+lease 192.168.3.89 {
+  starts 4 2009/03/12 09:49:27;
+  ends 5 2009/03/13 09:49:27;
+  tstp 5 2009/03/13 09:49:27;
+  binding state free;
+  hardware ethernet 00:00:c6:34:d6:fe;
+  uid "\001\000\000\3064\326\376";
+}
+lease 192.168.3.81 {
+  starts 4 2009/03/12 09:54:01;
+  ends 5 2009/03/13 09:54:01;
+  tstp 5 2009/03/13 09:54:01;
+  binding state free;
+  hardware ethernet 00:30:05:e6:10:3c;
+  uid "\001\0000\005\346\020<";
+}
+lease 192.168.3.79 {
+  starts 4 2009/03/12 10:43:47;
+  ends 5 2009/03/13 10:43:47;
+  tstp 5 2009/03/13 10:43:47;
+  binding state free;
+  hardware ethernet 00:16:41:2d:9f:ff;
+  uid "\001\000\026A-\237\377";
+}
+lease 192.168.3.78 {
+  starts 4 2009/03/12 10:46:11;
+  ends 5 2009/03/13 10:46:11;
+  tstp 5 2009/03/13 10:46:11;
+  binding state free;
+  hardware ethernet 00:30:05:e4:af:72;
+  uid "\001\0000\005\344\257r";
+}
+lease 192.168.3.80 {
+  starts 4 2009/03/12 13:57:24;
+  ends 5 2009/03/13 13:57:24;
+  tstp 5 2009/03/13 13:57:24;
+  binding state free;
+  hardware ethernet 00:16:36:70:57:5b;
+  uid "\001\000\0266pW[";
+}
+lease 192.168.3.82 {
+  starts 4 2009/03/12 14:43:58;
+  ends 5 2009/03/13 14:43:58;
+  tstp 5 2009/03/13 14:43:58;
+  binding state free;
+  hardware ethernet 00:15:b7:7d:25:5c;
+  uid "\001\000\025\267}%\\";
+}
+lease 192.168.3.86 {
+  starts 4 2009/03/12 14:52:23;
+  ends 5 2009/03/13 14:52:23;
+  tstp 5 2009/03/13 14:52:23;
+  binding state free;
+  hardware ethernet 00:15:60:c2:60:8d;
+  uid "\001\000\025`\302`\215";
+}
+lease 192.168.3.71 {
+  starts 5 2009/03/13 09:22:46;
+  ends 6 2009/03/14 09:22:46;
+  tstp 6 2009/03/14 09:22:46;
+  binding state free;
+  hardware ethernet 00:1f:c6:34:d6:fe;
+  uid "\001\000\037\3064\326\376";
+}
+lease 192.168.3.74 {
+  starts 3 2009/03/11 18:05:36;
+  ends 3 2009/03/18 18:05:36;
+  tstp 3 2009/03/18 18:05:36;
+  binding state free;
+  hardware ethernet 00:15:99:2d:62:fc;
+  uid "\001\000\025\231-b\374";
+}
+lease 10.1.0.1 {
+  starts 4 2009/05/07 08:30:04;
+  ends 5 2009/05/08 08:30:04;
+  binding state active;
+  next binding state free;
+  hardware ethernet 00:15:f2:27:fd:71;
+  uid "\001\000\025\362'\375q";
+  client-hostname "pc2";
+}
+lease 10.1.0.2 {
+  starts 4 2009/05/07 08:30:40;
+  ends 5 2009/05/08 08:30:40;
+  binding state active;
+  next binding state free;
+  hardware ethernet 00:b0:d0:64:bc:29;
+  uid "\001\000\260\320d\274)";
+  client-hostname "pc3";
+}
+lease 192.168.3.70 {
+  starts 4 2009/05/07 08:31:39;
+  ends 5 2009/05/08 08:31:39;
+  binding state active;
+  next binding state free;
+  hardware ethernet 00:13:d4:e6:32:96;
+  uid "\001\000\023\324\3462\226";
+  client-hostname "PC1";
+}
+lease 192.168.3.68 {
+  starts 4 2009/05/07 08:45:03;
+  ends 5 2009/05/08 08:45:03;
+  binding state active;
+  next binding state free;
+  hardware ethernet 00:1f:c6:d9:ae:16;
+  uid "\001\000\037\306\331\256\026";
+  client-hostname "Karol-PC";
+}
+lease 192.168.3.84 {
+  starts 4 2009/05/07 08:51:16;
+  ends 5 2009/05/08 08:51:16;
+  binding state active;
+  next binding state free;
+  hardware ethernet 00:06:4f:02:4d:b6;
+  uid "\001\000\006O\002M\266";
+  client-hostname "pc4";
+}
+lease 192.168.3.99 {
+  starts 4 2009/05/07 09:08:31;
+  ends 5 2009/05/08 09:08:31;
+  binding state active;
+  next binding state free;
+  hardware ethernet 00:16:d4:4f:c8:b6;
+  uid "\001\000\026\324O\310\266";
+  client-hostname "ad86563f6dbe433";
+}
+
