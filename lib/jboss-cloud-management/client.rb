@@ -6,7 +6,7 @@ require 'logger'
 module JBossCloudManagement
   class Client
     def initialize( ip, config )
-      RestClient.log = 'stdout'
+      #RestClient.log = 'stdout'
       @log        = Logger.new(STDOUT)
       @ip         = ip
       @config     = config
@@ -22,6 +22,7 @@ module JBossCloudManagement
       else
         @log.warn "Port #{@config.port} is closed on #{@ip}, ignoring."
       end
+      nil
     end
 
     def get( url )

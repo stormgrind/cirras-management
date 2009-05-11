@@ -1,4 +1,4 @@
-require 'helper/ip-helper'
+require 'jboss-cloud-management/helper/ip-helper'
 
 module JBossCloudManagement
   class ConfigHelper
@@ -9,13 +9,7 @@ module JBossCloudManagement
     end
 
     def appliance_names
-      names = []
 
-      Dir[ "#{@ace_appliances_location}/*" ].each do |file|
-        names.push( File.basename( file ) ) if File.directory?(file)
-      end
-
-      names
     end
 
     def is_ec2?

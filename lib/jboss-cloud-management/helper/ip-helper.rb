@@ -101,7 +101,7 @@ module JBossCloudManagement
       end
 
       if valid_addresses.size > 0
-        @log.info "Found #{valid_addresses.size} valid address#{valid_addresses.size > 1 ? "es" : ""}: #{valid_addresses.join(",")}."
+        @log.info "Found #{valid_addresses.size} valid address#{valid_addresses.size > 1 ? "es" : ""}: #{valid_addresses.join(", ")}."
       else
         @log.info "No valid addresses found."
       end
