@@ -1,5 +1,39 @@
 require 'rubygems'
-require 'rest_client'
-require 'yaml'
+require 'restclient'
+require 'timeout'
+require 'logger'
 
-puts RestClient.get('http://10.1.0.5:4545/info').to_yaml
+module JBossCloudManagement
+  class Client
+    def initialize( ip, config )
+      RestClient.log = 'stdout'
+      @log        = Logger.new(STDOUT)
+      @ip         = ip
+      @config     = config
+      @resource   = "http://#{@ip}:#{@config.port}"
+      @ip_helper  = IPHelper.new
+    end
+
+    def get_info
+      @log.info "Getting info from node #{@ip}..."
+
+      if @ip_helper.is_port_open?( @ip, @config.port )
+        return get( "#{@resource}/info" )
+      end
+    end
+
+    def get( url )
+      begin
+        Timeout::timeout(@config.timeout) do
+          return RestClient.get( url )
+        end
+      rescue Timeout::Error
+        @log.warn "Node #{@ip} hasn't replied in #{@config.timeout} seconds for GET request on #{url}."
+      end
+      nil
+    end
+
+  end
+end
+
+

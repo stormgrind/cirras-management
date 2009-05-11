@@ -1,5 +1,5 @@
 ---
-  environment: production
+  #environment: production
   chdir: . # just for now, for production: /usr/share/jboss-cloud-management
   address: 0.0.0.0
   user: thin

@@ -10,8 +10,7 @@ module JBossCloudManagement
 
     def preparet_get
       get '/*' do
-        puts Config.instance.nodes.size
-
+        "it works"
       end
     end
   end
