@@ -1,18 +1,25 @@
 require 'rubygems'
 require 'sinatra'
+require 'base64'
+
+require 'response'
+
 
 module JBossCloudManagement
   class URIs
     def initialize
-
-      preparet_get
+      handle_get
     end
 
-    def preparet_get
+    def handle_get
       get '/*' do
-        "it works"
+        
+
+        #i request.ip
+        Base64.b64encode(Response.new( Config.instance.appliance_names ).to_yaml)
       end
     end
   end
 end
+
 

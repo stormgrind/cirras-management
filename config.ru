@@ -1,3 +1,9 @@
-require 'lib/jboss-cloud-management/server'
+$: << 'lib/jboss-cloud-management'
+
+require 'server'
+
+module JBossCloudManagement
+    Server.new
+end
 
 run Sinatra::Application

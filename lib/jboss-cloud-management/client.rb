@@ -19,6 +19,8 @@ module JBossCloudManagement
 
       if @ip_helper.is_port_open?( @ip, @config.port )
         return get( "#{@resource}/info" )
+      else
+        @log.warn "Port #{@config.port} is closed on #{@ip}, ignoring."
       end
     end
 

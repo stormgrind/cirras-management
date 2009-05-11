@@ -1,3 +1,0 @@
-[submodule "lib/jboss-cloud-management-support"]
-	path = lib/jboss-cloud-management-support
-	url = git://github.com/goldmann/jboss-cloud-management-support.git
