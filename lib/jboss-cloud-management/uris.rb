@@ -2,7 +2,7 @@ require 'rubygems'
 require 'sinatra'
 require 'base64'
 
-require 'jboss-cloud-management/response'
+require 'jboss-cloud-management/model/response'
 
 module JBossCloudManagement
   class URIs

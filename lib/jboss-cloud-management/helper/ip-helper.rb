@@ -33,18 +33,10 @@ module JBossCloudManagement
 
     def initialize
       @leases_file        = "./leases" # "/var/lib/dhcpd/dhcpd.leases"
-      @ec2_config_file    = "#{ENV['HOME']}/.jboss-cloud/ec2"
       @timeout            = 2
       @log                = LogHelper.instance.log
 
       @is_ec2             = is_port_open?( "169.254.169.254" )
-
-      if @is_ec2
-        validate_aws_config
-        @ec2 = EC2::Base.new(:access_key_id => @aws_data['access_key'], :secret_access_key => @aws_data['secret_access_key'])
-        # just for test if credentials are valid        
-        @ec2.describe_availability_zones
-      end
     end
 
     def allowed_ips
@@ -107,18 +99,6 @@ module JBossCloudManagement
       end
 
       valid_addresses
-    end
-
-    # ========================================
-
-    def validate_aws_config
-      raise "Configuration file #{@ec2_config_file}, doesn't exists. Please create it."  unless File.exists?( @ec2_config_file )
-
-      @aws_data = YAML.load_file( @ec2_config_file )
-
-      raise "Invalid configuration file #{@ec2_config_file}, please check structure of this file." unless @aws_data
-      raise "Please specify access key in aws section in configuration file #{@ec2_config_file}: access_key: YOUR_ACCESS_KEY" if @aws_data['access_key'].nil?
-      raise "Please specify secret access key in aws section in configuration file #{@ec2_config_file}: secret_access_key: YOUR_SECRET_ACCESS_KEY" if @aws_data['secret_access_key'].nil?
     end
 
     def is_port_open?(ip, port = 80)
