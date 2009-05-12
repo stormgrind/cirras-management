@@ -1,8 +1,6 @@
 require 'rubygems'
 require 'fastthread'
 require 'yaml'
-require 'logger'
-require 'singleton'
 require 'base64'
 require 'resolv'
 
@@ -37,7 +35,6 @@ module JBossCloudManagement
           break if @ip_helper.is_port_open?( "localhost",  @config.port )
           sleep 1
         end
-
         update_node_list_periodically
       end
     end
@@ -70,16 +67,18 @@ module JBossCloudManagement
 
         register_node( node )
       end
+
+      puts @nodes.to_yaml
     end
 
     def register_node( node )
       node.address = convert_to_ipv4( node.address )
 
-      if @nodes.has_key?( node.address )
-        @nodes[node.address] = node unless @nodes[node.address].name.eql?( node.name )
-      else
-        @nodes[node.address] = node
-      end
+      # if we have already a node with that IP and node name is the same
+      return if @nodes.has_key?( node.address ) and @nodes[node.address].name.eql?( node.name )
+
+      @log.info "Adding #{node.name} node available on #{node.address} to node list"
+      @nodes[node.address] = node
     end
 
     def convert_to_ipv4( address )

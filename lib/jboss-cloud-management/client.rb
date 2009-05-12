@@ -6,7 +6,7 @@ require 'jboss-cloud-management/helper/log-helper'
 module JBossCloudManagement
   class Client
     def initialize( ip, config )
-      #RestClient.log = 'stdout'
+
       @log        = LogHelper.instance.log
       @ip         = ip
       @config     = config
@@ -20,7 +20,7 @@ module JBossCloudManagement
       if @ip_helper.is_port_open?( @ip, @config.port )
         return get( "#{@resource}/info" )
       else
-        @log.warn "Port #{@config.port} is closed on #{@ip}, ignoring."
+        @log.warn "Port #{@config.port} is closed on node #{@ip}, ignoring."
       end
       nil
     end
