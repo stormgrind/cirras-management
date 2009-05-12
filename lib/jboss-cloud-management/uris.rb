@@ -20,7 +20,7 @@ module JBossCloudManagement
           @handler = ManagementApplianceHandler.new
       end
 
-      @handler.handle
+      @handler.handle unless @handler.nil?
 
       handle_default
     end
