@@ -8,7 +8,14 @@ module JBossCloudManagement
   class URIs
     def initialize( config )
       @config = config
+
+      set_sinatra_parameters
       handle_get
+    end
+
+    def set_sinatra_parameters
+      enable  :raise_errors
+      disable :logging
     end
 
     def handle_get

@@ -26,7 +26,7 @@ require 'ping'
 require 'yaml'
 require 'rubygems'
 require 'EC2'
-require 'logger'
+require 'jboss-cloud-management/helper/log-helper'
 
 module JBossCloudManagement
   class IPHelper
@@ -35,7 +35,7 @@ module JBossCloudManagement
       @leases_file        = "./leases" # "/var/lib/dhcpd/dhcpd.leases"
       @ec2_config_file    = "#{ENV['HOME']}/.jboss-cloud/ec2"
       @timeout            = 2
-      @log                = Logger.new(STDOUT)
+      @log                = LogHelper.instance.log
 
       @is_ec2             = is_port_open?( "169.254.169.254" )
 

@@ -12,20 +12,34 @@ require 'jboss-cloud-management/node'
 require 'jboss-cloud-management/client'
 require 'jboss-cloud-management/helper/config-helper'
 require 'jboss-cloud-management/helper/ip-helper'
+require 'jboss-cloud-management/helper/log-helper'
 
 module JBossCloudManagement
   class Manager
     def initialize
-      @config     = Config.new
-      @log        = Logger.new(STDOUT)
+      @config           = Config.new
+      Manager.config    = @config
+
+      @log        = LogHelper.instance.log
       @ip_helper  = IPHelper.new
 
       @nodes      = {}
 
-      Manager.config = @config
-
       URIs.new( @config )
-      update_node_list_periodically
+
+      wait_for_web_server
+    end
+
+    def wait_for_web_server
+      t = Thread.new do
+        while true do
+          @log.info "Waiting for web server..."
+          break if @ip_helper.is_port_open?( "localhost",  @config.port )
+          sleep 1
+        end
+
+        update_node_list_periodically
+      end
     end
 
     def self.config

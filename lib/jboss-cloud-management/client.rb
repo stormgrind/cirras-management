@@ -1,13 +1,13 @@
 require 'rubygems'
 require 'restclient'
 require 'timeout'
-require 'logger'
+require 'jboss-cloud-management/helper/log-helper'
 
 module JBossCloudManagement
   class Client
     def initialize( ip, config )
       #RestClient.log = 'stdout'
-      @log        = Logger.new(STDOUT)
+      @log        = LogHelper.instance.log
       @ip         = ip
       @config     = config
       @resource   = "http://#{@ip}:#{@config.port}"
