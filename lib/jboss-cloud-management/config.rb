@@ -25,7 +25,7 @@ module JBossCloudManagement
     attr_accessor :running_on_ec2
 
     def is_management_appliance?
-      @appliance_name.eql?("management-apliance")
+      @appliance_name.eql?(APPLIANCE_TYPE[:management])
     end
 
   end

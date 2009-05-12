@@ -134,5 +134,15 @@ module JBossCloudManagement
       return Resolv.getaddress( address )
     end
 
+    def get_node_by_address( address )
+      @nodes[address]
+    end
+
+    def get_nodes_by_type( type )
+      nodes = []
+      @nodes.each_value {| node | nodes.push( node ) if node.name.eql?( type ) }
+      nodes
+    end
+
   end
 end

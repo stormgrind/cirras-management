@@ -10,6 +10,18 @@ require 'jboss-cloud-management/node/aws-node-manager'
 require 'jboss-cloud-management/node/default-node-manager'
 
 module JBossCloudManagement
+
+  APPLIANCE_TYPE = {
+          :httpd          => "httpd-appliance",
+          :jbossas5       => "jboss-as5-appliance",
+          :backend        => "back-end-appliance",
+          :frontend       => "front-end-appliance",
+          :jbossjgroups   => "jboss-jgroups-appliance",
+          :management     => "management-appliance",
+          :meta           => "meta-appliance",
+          :postgis        => "postgis-appliance"
+  }
+
   class Manager
     def initialize
       @config           = Config.new
@@ -46,7 +58,7 @@ module JBossCloudManagement
     end
 
     def create_client
-
+      puts @node_manager.get_nodes_by_type( APPLIANCE_TYPE[:management] )
     end
 
     def nodes
