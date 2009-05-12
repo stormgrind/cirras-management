@@ -17,16 +17,19 @@ module JBossCloudManagement
 
       @log = LogHelper.instance.log
 
-      if @config.running_on_ec2
-        @node_manager = AWSNodeManager.new( @config )
-      else
-        @node_manager = DefaultNodeManager.new( @config )
+      @log.info "Setting up management environment for #{@config.appliance_name}"
+
+      if @config.is_management_appliance?
+        if @config.running_on_ec2
+          @node_manager = AWSNodeManager.new( @config )
+        else
+          @node_manager = DefaultNodeManager.new( @config )
+        end
+
+        create_client
       end
 
       URIs.new( @config )
-
-      @config.is_management_appliance?
-
       wait_for_web_server
     end
 
@@ -37,8 +40,17 @@ module JBossCloudManagement
           break if IPHelper.new.is_port_open?( "localhost", @config.port )
           sleep 1
         end
+        @log.info "Web server is running and ready for requests!"
         update_node_list_periodically
       end
+    end
+
+    def create_client
+
+    end
+
+    def nodes
+      @node_manager.nodes
     end
 
     def self.config

@@ -18,6 +18,8 @@ module JBossCloudManagement
       @ip_helper  = IPHelper.new
     end
 
+    attr_reader :nodes
+
     def node_addresses
       # only a stub, should be implemented in other class
       raise "NotImplemented!"
