@@ -7,7 +7,7 @@
   port: 4545
   pid: /var/lock/jboss-cloud-management.pid
   rackup: config.ru
-  log: /var/log/messages/jboss-cloud-management.log
+  log: /var/log/jboss-cloud-management/thin.log
   max_conns: 100
   timeout: 30
   max_persistent_conns: 100
