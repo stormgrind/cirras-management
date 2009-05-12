@@ -11,10 +11,10 @@ module JBossCloudManagement
       @sleep            = 30    # time to wait before next node querying
 
       @appliance_name   = config['appliance_name']
-
       @config_helper    = ConfigHelper.new
-
       @running_on_ec2   = @config_helper.is_ec2?
+
+      @rack_config      = YAML.load_file( "config/config.yaml" )
 
     end
 
@@ -23,6 +23,7 @@ module JBossCloudManagement
     attr_accessor :appliance_name
     attr_accessor :sleep
     attr_accessor :running_on_ec2
+    attr_accessor :rack_config
 
     def is_management_appliance?
       @appliance_name.eql?(APPLIANCE_TYPE[:management])

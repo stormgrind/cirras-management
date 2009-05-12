@@ -5,7 +5,7 @@ module JBossCloudManagement
     def initialize( config )
       super( config )
 
-      @ec2_config_file = "/home/thin/.jboss-cloud/ec2"
+      @ec2_config_file = "/home/#{@config.rack_config['user']}/.jboss-cloud/ec2"
 
       validate_aws_config
 
