@@ -13,7 +13,7 @@ module JBossCloudManagement
   class Manager
     def initialize
       @config           = Config.new
-      @@config          = @config    
+      @@config          = @config
 
       @log = LogHelper.instance.log
 
@@ -24,6 +24,8 @@ module JBossCloudManagement
       end
 
       URIs.new( @config )
+
+      @config.is_management_appliance?
 
       wait_for_web_server
     end

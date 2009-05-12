@@ -5,7 +5,6 @@ require 'yaml'
 require 'base64'
 require 'resolv'
 require 'jboss-cloud-management/helper/ip-helper'
-require 'jboss-cloud-management/model/response'
 require 'jboss-cloud-management/model/node'
 
 module JBossCloudManagement
@@ -65,9 +64,18 @@ module JBossCloudManagement
         # if we got no response from node go to next node
         next if info.nil?
 
-        response  = YAML.load( Base64.decode64( info ) )
+        node = YAML.load( Base64.decode64( info ) )
 
-        node_list.push( Node.new( response.appliance_name, address ) )
+        unless node == false or node.class.eql?(Node)
+          @log.info "Not a valid response from node #{address}, ignoring."
+          next
+        end
+
+        node.address  = address
+
+        @log.info "Found a #{node.name} on #{node.address}"
+
+        node_list.push( node )
       end
 
       added = updated = removed = 0

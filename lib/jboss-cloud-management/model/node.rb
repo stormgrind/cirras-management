@@ -1,8 +1,7 @@
 module JBossCloudManagement
   class Node
-    def initialize( name, address )
-      @address  = address
-      @name     = name
+    def initialize( name )
+      @name = name
     end
 
     attr_accessor :address

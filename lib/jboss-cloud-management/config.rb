@@ -23,5 +23,10 @@ module JBossCloudManagement
     attr_accessor :appliance_name
     attr_accessor :sleep
     attr_accessor :running_on_ec2
+
+    def is_management_appliance?
+      @appliance_name.eql?("management-apliance")
+    end
+
   end
 end
