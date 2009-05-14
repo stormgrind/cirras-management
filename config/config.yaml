@@ -1,6 +1,6 @@
 ---
-  #environment: production
-  chdir: . # just for now, for production: /usr/share/jboss-cloud-management
+  environment: production
+  chdir:  /usr/share/jboss-cloud-management
   address: 0.0.0.0
   user: thin
   group: thin
@@ -11,4 +11,4 @@
   max_conns: 100
   timeout: 30
   max_persistent_conns: 100
-  daemonize: false
+  daemonize: true

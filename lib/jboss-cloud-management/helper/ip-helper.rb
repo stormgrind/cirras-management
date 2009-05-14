@@ -25,80 +25,18 @@ require 'timeout'
 require 'ping'
 require 'yaml'
 require 'rubygems'
-require 'EC2'
-require 'jboss-cloud-management/helper/log-helper'
 
 module JBossCloudManagement
   class IPHelper
 
     def initialize
-      @leases_file        = "./leases" # "/var/lib/dhcpd/dhcpd.leases"
-      @timeout            = 2
-      @log                = LogHelper.instance.log
-
-      @is_ec2             = is_port_open?( "169.254.169.254" )
+      @timeout = 2
     end
 
     def allowed_ips
       local_ip = UDPSocket.open {|s| s.connect('64.233.187.99', 1); s.addr.last }
 
       [ '127.0.0.1', local_ip ]
-    end
-
-    def node_ips
-      addresses         = []
-      valid_addresses   = []
-
-      unless @is_ec2
-        # if this is not EC2
-        log_msg = "Package dhcpd isn't installed or DHCP server isn't running. Aborting."
-
-        unless File.exists?( @leases_file )
-          @log.fatal log_msg
-          raise log_msg
-        end
-
-        # get IP addresses from lease file
-        lease_ips = `grep -B 3 "binding state active" #{@leases_file} | grep lease | awk '{ print $2 }'`
-
-        # parsing file
-        lease_ips.each { |line| addresses.push line.strip }
-      else
-        # if this is EC2
-        begin
-          instances = @ec2.describe_instances
-        rescue
-          log_msg = "No running instances?! WTF? At least our instance should be in instance list! Aborting."
-
-          @log.error log_msg
-          raise log_msg
-        end
-
-        for reservation in instances.reservationSet.item
-          for instance in reservation.instancesSet.item
-            addresses.push( instance.privateDnsName.strip )
-          end
-        end
-
-      end
-
-      for ip in addresses
-        @log.info "IP: #{ip}, checking if host is alive..."
-        if Ping.pingecho( ip, @timeout )
-          @log.info " \\__ ALIVE: Host #{ip} is alive, good"
-          valid_addresses.push( ip )
-        else
-          @log.info " \\__ DEAD: Host #{ip} hadn't responded in #{@timeout} seconds, not so good, suspecting as dead, removing from cache"
-        end
-      end
-
-      if valid_addresses.size > 0
-        @log.info "Found #{valid_addresses.size} valid address#{valid_addresses.size > 1 ? "es" : ""}: #{valid_addresses.join(", ")}."
-      else
-        @log.info "No valid addresses found."
-      end
-
-      valid_addresses
     end
 
     def is_port_open?(ip, port = 80)
