@@ -48,7 +48,7 @@ module JBossCloudManagement
       end
 
       # bind latest api to "latest" prefix
-      RequestHandler.new( @config, @config.api, "latest" )
+      RequestHandler.new( @config, APIS.first, "latest" )
 
       wait_for_web_server
     end
@@ -66,7 +66,6 @@ module JBossCloudManagement
     end
 
     def create_client
-      puts @node_manager.get_nodes_by_type( APPLIANCE_TYPE[:management] )
     end
 
     def nodes

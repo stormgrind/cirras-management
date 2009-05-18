@@ -5,7 +5,8 @@ module JBossCloudManagement
   class DefaultNodeManager < BaseNodeManager
     def initialize( config )
       super( config )
-      @leases_file  = "/var/lib/dhcpd/dhcpd.leases"
+
+      @leases_file  = @config.leases_file
     end
 
     def node_addresses

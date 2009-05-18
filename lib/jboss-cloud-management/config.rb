@@ -10,24 +10,27 @@ module JBossCloudManagement
       @port             = 4545          # port used to listen on
       @timeout          = 2             # time to wait for response from other node (in seconds)
       @sleep            = 30            # time to wait before next node querying
-      @api              = APIS.first    # latest api
 
       @appliance_name   = config['appliance_name']
       @config_helper    = ConfigHelper.new
       @running_on_ec2   = @config_helper.is_ec2?
 
-      @rack_config      = YAML.load_file( "config/config.yaml" )
+      @rack_config      = YAML.load_file( "config/config.ru" )
+      @leases_file      = "/var/lib/dhcpd/dhcpd.leases"
+
+      configure :test, :development do
+        @leases_file    = "test/leases"
+      end
 
     end
 
-    attr_reader :api
-
-    attr_accessor :port
-    attr_accessor :timeout
-    attr_accessor :appliance_name
-    attr_accessor :sleep
-    attr_accessor :running_on_ec2
-    attr_accessor :rack_config
+    attr_reader :rack_config
+    attr_reader :running_on_ec2
+    attr_reader :port
+    attr_reader :timeout
+    attr_reader :appliance_name
+    attr_reader :sleep
+    attr_reader :leases_file
 
     def is_management_appliance?
       @appliance_name.eql?(APPLIANCE_TYPE[:management])

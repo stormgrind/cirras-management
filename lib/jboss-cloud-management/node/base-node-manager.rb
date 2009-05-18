@@ -66,7 +66,7 @@ module JBossCloudManagement
         # if we got no response from node go to next node
         next if info.nil?
 
-        node = YAML.load( Base64.decode64( info ) )
+        node = YAML.load( info )
 
         unless node == false or node.class.eql?(Node)
           @log.info "Not a valid response from node #{address}, ignoring."
@@ -111,7 +111,7 @@ module JBossCloudManagement
       resource = "http://#{address}:#{@config.port}"
 
       if @ip_helper.is_port_open?( address, @config.port )
-        return get( "#{resource}/info", address )
+        return get( "#{resource}/latest/info", address )
       else
         @log.warn "Port #{@config.port} is closed on node #{address}, ignoring."
       end
@@ -134,14 +134,18 @@ module JBossCloudManagement
       return Resolv.getaddress( address )
     end
 
-    def get_node_by_address( address )
+    def node_by_address( address )
       @nodes[address]
     end
 
-    def get_nodes_by_type( type )
+    def nodes_by_type( type )
       nodes = []
       @nodes.each_value {| node | nodes.push( node ) if node.name.eql?( type ) }
       nodes
+    end
+
+    def nodes
+      @nodes
     end
 
   end
