@@ -47,6 +47,8 @@ module JBossCloudManagement
         RequestHandler.new( @config, api )
       end
 
+      # bind latest api to "latest" prefix
+      RequestHandler.new( @config, @config.api, "latest" )
 
       wait_for_web_server
     end

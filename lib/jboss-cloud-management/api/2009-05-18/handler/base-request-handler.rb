@@ -9,12 +9,13 @@ module JBossCloudManagement
   end
 
   class BaseRequestHandler
-    def initialize
+    def initialize( prefix )
+      @prefix = prefix
 
     end
 
-    def handle
-      get '/info' do
+    def handle     
+      get "/#{@prefix}/info" do
         node = Node.new( Manager.config.appliance_name )
         node.to_yaml
       end

@@ -3,18 +3,21 @@ require 'sinatra'
 
 module JBossCloudManagement
   class RequestHandler
-    def initialize( config, api )
+    def initialize( config, api, prefix = nil )
       @config   = config
       @api      = api
+      @prefix   = prefix
+
+      @prefix   = @api if @prefix.nil?
 
       Dir["lib/jboss-cloud-management/api/#{@api}/handler/*"].each {|file| require file }
 
       set_sinatra_parameters
 
       if @config.appliance_name.eql?(APPLIANCE_TYPE[:management])
-        @handler = ManagementApplianceRequestHandler.new
+        @handler = ManagementApplianceRequestHandler.new( @prefix )
       else
-        @handler = DefaultRequestHandler.new
+        @handler = DefaultRequestHandler.new( @prefix )
       end
 
       @handler.handle
