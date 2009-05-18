@@ -40,6 +40,8 @@ module JBossCloudManagement
           @node_manager = DefaultNodeManager.new( @config )
         end
 
+        @@node_manager = @node_manager
+
         create_client
       end
 
@@ -89,10 +91,15 @@ module JBossCloudManagement
       @@config
     end
 
+    def self.node_manager
+      @@node_manager
+    end
+
     def update_node_list_periodically
       t = Thread.new do
         while true do
           @node_manager.register_nodes
+          @node_manager.push_management_address
           sleep @config.sleep # check after 30 sec if there are changes in nodes (new added, removed, etc)
         end
       end

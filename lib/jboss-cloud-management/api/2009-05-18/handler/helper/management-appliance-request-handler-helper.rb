@@ -1,4 +1,5 @@
 require 'jboss-cloud-management/api/2009-05-18/handler/helper/base-request-handler-helper'
+require 'jboss-cloud-management/api/2009-05-18/handler/address-request-handler'
 
 module JBossCloudManagement
   class ManagementApplianceRequestHandlerHelper < BaseRequestHandlerHelper
@@ -7,7 +8,7 @@ module JBossCloudManagement
     end
 
     def define_handlers
-      #@handlers["/#{@prefix}/test"] = InfoRequestHandler.new( "/#{@prefix}/test" )
+      @handlers["/#{@prefix}/address/:appliance"] = AddressRequestHandler.new( "/#{@prefix}/address/:appliance" )
     end
   end
 end

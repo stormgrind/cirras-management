@@ -18,6 +18,8 @@ module JBossCloudManagement
         @handler = DefaultRequestHandlerHelper.new( @api_version, @prefix )
       end
 
+      #DefaultRequestHandlerHelper.new( @api_version, @prefix ).define_handlers
+
       @handler.define_handlers
     end
   end

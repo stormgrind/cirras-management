@@ -129,6 +129,28 @@ module JBossCloudManagement
       nil
     end
 
+    def put( url, address, data )
+      begin
+        Timeout::timeout(@config.timeout) do
+          RestClient.put( url, data )
+        end
+      rescue Timeout::Error
+        @log.warn "Node #{address} hasn't replied in #{@config.timeout} seconds for PUT request on #{address}."
+      end
+    end
+
+    def push_management_address
+      management_appliances = nodes_by_type( APPLIANCE_TYPE[:management] )
+
+      return if management_appliances.size  == 0
+
+      address = management_appliances.first.address
+
+      @nodes.each do |ip, node|
+        put( "http://#{ip}:#{@config.port}/latest/address/#{APPLIANCE_TYPE[:management]}", ip, :address => address ) #unless node.name.eql?( APPLIANCE_TYPE[:management] )
+      end
+    end
+
     def convert_to_ipv4( address )
       return address if address.match(/\A(?:25[0-5]|(?:2[0-4]|1\d|[1-9])?\d)(?:\.(?:25[0-5]|(?:2[0-4]|1\d|[1-9])?\d)){3}\z/)
       return Resolv.getaddress( address )
