@@ -1,0 +1,13 @@
+---
+  chdir: .
+  address: 0.0.0.0
+  user: thin
+  group: thin
+  port: 4545
+  pid: /var/lock/jboss-cloud-management.pid
+  rackup: config.ru
+  log: /var/log/jboss-cloud-management/thin.log
+  max_conns: 100
+  timeout: 30
+  max_persistent_conns: 100
+  daemonize: false

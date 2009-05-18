@@ -1,14 +1,16 @@
 require 'jboss-cloud-management/helper/config-helper'
 
 module JBossCloudManagement
+
   class Config
     def initialize
       config = YAML.load_file( "/etc/jboss-cloud" )
       raise "Invalid config file!" unless config
 
-      @port             = 4545  # port used to listen on
-      @timeout          = 2     # time to wait for response from other node (in seconds)
-      @sleep            = 30    # time to wait before next node querying
+      @port             = 4545          # port used to listen on
+      @timeout          = 2             # time to wait for response from other node (in seconds)
+      @sleep            = 30            # time to wait before next node querying
+      @api              = APIS.first    # latest api
 
       @appliance_name   = config['appliance_name']
       @config_helper    = ConfigHelper.new
@@ -17,6 +19,8 @@ module JBossCloudManagement
       @rack_config      = YAML.load_file( "config/config.yaml" )
 
     end
+
+    attr_reader :api
 
     attr_accessor :port
     attr_accessor :timeout

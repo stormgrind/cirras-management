@@ -2,7 +2,7 @@ require 'rubygems'
 require 'fastthread'
 require 'yaml'
 
-require 'jboss-cloud-management/uris'
+require 'jboss-cloud-management/api/request-handler'
 require 'jboss-cloud-management/config'
 require 'jboss-cloud-management/helper/ip-helper'
 require 'jboss-cloud-management/helper/log-helper'
@@ -21,6 +21,8 @@ module JBossCloudManagement
           :meta           => "meta-appliance",
           :postgis        => "postgis-appliance"
   }
+
+  APIS = [ "2009-05-18" ]
 
   class Manager
     def initialize
@@ -41,7 +43,11 @@ module JBossCloudManagement
         create_client
       end
 
-      URIs.new( @config )
+      for api in APIS
+        RequestHandler.new( @config, api )
+      end
+
+
       wait_for_web_server
     end
 
