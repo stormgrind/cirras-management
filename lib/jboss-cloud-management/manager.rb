@@ -2,7 +2,7 @@ require 'rubygems'
 require 'fastthread'
 require 'yaml'
 
-require 'jboss-cloud-management/api/request-handler'
+require 'jboss-cloud-management/api/request-handler-helper'
 require 'jboss-cloud-management/config'
 require 'jboss-cloud-management/helper/ip-helper'
 require 'jboss-cloud-management/helper/log-helper'
@@ -43,12 +43,25 @@ module JBossCloudManagement
         create_client
       end
 
+      # sinatra parameters
+      enable  :raise_errors
+      disable :logging
+
       for api in APIS
-        RequestHandler.new( @config, api )
+        RequestHandlerHelper.new( @config, api )
       end
 
       # bind latest api to "latest" prefix
-      RequestHandler.new( @config, APIS.first, "latest" )
+      RequestHandlerHelper.new( @config, APIS.first, "latest" )
+
+      get '/' do
+        apis = "latest\n"
+        for api in APIS
+          apis += api + "\n"
+        end
+
+        apis
+      end
 
       wait_for_web_server
     end
