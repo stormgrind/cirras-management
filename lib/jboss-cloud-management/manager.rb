@@ -1,8 +1,8 @@
 require 'rubygems'
 require 'fastthread'
+require 'sinatra'
 require 'yaml'
 
-require 'jboss-cloud-management/api/request-handler-helper'
 require 'jboss-cloud-management/config'
 require 'jboss-cloud-management/helper/ip-helper'
 require 'jboss-cloud-management/helper/log-helper'

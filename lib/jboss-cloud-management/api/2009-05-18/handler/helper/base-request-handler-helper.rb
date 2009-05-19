@@ -1,4 +1,4 @@
-require 'jboss-cloud-management/api/2009-05-18/handler/info-request-handler'
+require 'jboss-cloud-management/api/2009-05-18/handler/get/info-request-handler'
 
 module JBossCloudManagement
   class BaseRequestHandlerHelper

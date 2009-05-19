@@ -1,5 +1,5 @@
 require 'jboss-cloud-management/api/2009-05-18/handler/helper/base-request-handler-helper'
-require 'jboss-cloud-management/api/2009-05-18/handler/management-address-request-handler'
+require 'jboss-cloud-management/api/2009-05-18/handler/put/management-address-request-handler'
 
 module JBossCloudManagement
   class DefaultRequestHandlerHelper < BaseRequestHandlerHelper
