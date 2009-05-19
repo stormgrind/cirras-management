@@ -21,7 +21,7 @@ module JBossCloudManagement
       end
 
       # get IP addresses from lease file
-      lease_ips = `grep -B 3 "binding state active" #{@leases_file} | grep lease | awk '{ print $2 }'`
+      lease_ips = `grep -B 5 "binding state active" #{@leases_file} | grep lease | awk '{ print $2 }'`
 
       # parsing file
       lease_ips.each { |line| addresses.push line.strip }
