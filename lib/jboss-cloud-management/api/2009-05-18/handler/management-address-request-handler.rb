@@ -10,7 +10,12 @@ module JBossCloudManagement
     def define_handle
       put @prefix do
         return if params[:address].nil?
-        LogHelper.instance.log.info "Got new management-appliance address: #{params[:address]}"
+
+        address = params[:address].strip
+
+        LogHelper.instance.log.info "Got new management-appliance address: #{address}"
+
+        Manager.config.management_appliance_address = address
       end
     end
   end

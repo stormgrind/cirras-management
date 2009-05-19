@@ -33,10 +33,8 @@ module JBossCloudManagement
       @timeout = 2
     end
 
-    def allowed_ips
-      local_ip = UDPSocket.open {|s| s.connect('64.233.187.99', 1); s.addr.last }
-
-      [ '127.0.0.1', local_ip ]
+    def local_ip
+      UDPSocket.open {|s| s.connect('64.233.187.99', 1); s.addr.last }
     end
 
     def is_port_open?(ip, port = 80)

@@ -140,15 +140,26 @@ module JBossCloudManagement
     end
 
     def push_management_address
+      @log.debug "Pushing management node address to nodes..."
       management_appliances = nodes_by_type( APPLIANCE_TYPE[:management] )
 
       return if management_appliances.size  == 0
 
       address = management_appliances.first.address
+      count   = 0
+
+      @log.debug "Management address is #{address}"
 
       @nodes.each do |ip, node|
-        put( "http://#{ip}:#{@config.port}/latest/address/#{APPLIANCE_TYPE[:management]}", ip, :address => address ) #unless node.name.eql?( APPLIANCE_TYPE[:management] )
+        unless node.name.eql?( APPLIANCE_TYPE[:management] )
+          @log.debug "Pushing management node address #{address} to #{node.name} on #{ip}..."
+          put( "http://#{ip}:#{@config.port}/latest/address/#{APPLIANCE_TYPE[:management]}", ip, :address => address )
+          @log.debug "Done"
+          count += 1
+        end
       end
+
+      @log.debug "Management node address pushed to #{count} nodes"
     end
 
     def convert_to_ipv4( address )

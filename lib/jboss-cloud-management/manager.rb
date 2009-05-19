@@ -34,6 +34,8 @@ module JBossCloudManagement
       @log.info "Setting up management environment for #{@config.appliance_name}"
 
       if @config.is_management_appliance?
+        @log.info "Setting up node managers..."
+
         if @config.running_on_ec2
           @node_manager = AWSNodeManager.new( @config )
         else
@@ -41,7 +43,7 @@ module JBossCloudManagement
         end
 
         @@node_manager = @node_manager
-
+      else
         create_client
       end
 
@@ -50,11 +52,10 @@ module JBossCloudManagement
       disable :logging
 
       for api in APIS
-        RequestHandlerHelper.new( @config, api )
+        bind_handler( api )
       end
 
-      # bind latest api to "latest" prefix
-      RequestHandlerHelper.new( @config, APIS.first, "latest" )
+      bind_handler( APIS.first, "latest" )
 
       get '/' do
         apis = "latest\n"
@@ -68,6 +69,22 @@ module JBossCloudManagement
       wait_for_web_server
     end
 
+    def bind_handler( api_version, prefix = nil )
+      prefix = api_version if prefix.nil?
+
+      Dir["lib/jboss-cloud-management/api/#{api_version}/handler/*/*"].each {|file| require file if File.exists?( file ) }
+
+      if @config.is_management_appliance?
+        handler = ManagementApplianceRequestHandlerHelper.new( api_version, prefix )
+      else
+        handler = DefaultRequestHandlerHelper.new( api_version, prefix )
+      end
+
+      #DefaultRequestHandlerHelper.new( @api_version, @prefix ).define_handlers
+
+      handler.define_handlers
+    end
+
     def wait_for_web_server
       t = Thread.new do
         while true do
@@ -79,6 +96,8 @@ module JBossCloudManagement
         update_node_list_periodically
       end
     end
+
+    # this is a client
 
     def create_client
     end
@@ -98,8 +117,10 @@ module JBossCloudManagement
     def update_node_list_periodically
       t = Thread.new do
         while true do
+          @log.debug "Begining node discovery..."
           @node_manager.register_nodes
-          @node_manager.push_management_address
+          @node_manager.push_management_address if @config.is_management_appliance?
+          @log.debug "Waiting #{@config.sleep} seconds before next node discovery..."
           sleep @config.sleep # check after 30 sec if there are changes in nodes (new added, removed, etc)
         end
       end

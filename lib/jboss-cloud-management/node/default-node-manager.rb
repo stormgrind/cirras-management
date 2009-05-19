@@ -26,6 +26,9 @@ module JBossCloudManagement
       # parsing file
       lease_ips.each { |line| addresses.push line.strip }
 
+      # push our local IP too
+      addresses.push @ip_helper.local_ip
+
       addresses
     end
   end

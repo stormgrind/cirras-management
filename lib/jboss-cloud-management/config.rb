@@ -15,7 +15,7 @@ module JBossCloudManagement
       @config_helper    = ConfigHelper.new
       @running_on_ec2   = @config_helper.is_ec2?
 
-      @rack_config      = YAML.load_file( "config/config.ru" )
+      @rack_config      = YAML.load_file( "config/config.yaml" )
       @leases_file      = "/var/lib/dhcpd/dhcpd.leases"
 
       configure :test, :development do
@@ -31,6 +31,8 @@ module JBossCloudManagement
     attr_reader :appliance_name
     attr_reader :sleep
     attr_reader :leases_file
+
+    attr_accessor :management_appliance_address
 
     def is_management_appliance?
       @appliance_name.eql?(APPLIANCE_TYPE[:management])
