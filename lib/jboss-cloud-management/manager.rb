@@ -93,7 +93,7 @@ module JBossCloudManagement
           sleep 1
         end
         @log.info "Web server is running and ready for requests!"
-        update_node_list_periodically
+        discover_nodes if @config.is_management_appliance?
       end
     end
 
@@ -114,12 +114,12 @@ module JBossCloudManagement
       @@node_manager
     end
 
-    def update_node_list_periodically
+    def discover_nodes
       t = Thread.new do
         while true do
           @log.debug "Begining node discovery..."
           @node_manager.register_nodes
-          @node_manager.push_management_address if @config.is_management_appliance?
+          @node_manager.push_management_address
           @log.debug "Waiting #{@config.sleep} seconds before next node discovery..."
           sleep @config.sleep # check after 30 sec if there are changes in nodes (new added, removed, etc)
         end

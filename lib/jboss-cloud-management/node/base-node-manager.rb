@@ -176,10 +176,5 @@ module JBossCloudManagement
       @nodes.each_value {| node | nodes.push( node ) if node.name.eql?( type ) }
       nodes
     end
-
-    def nodes
-      @nodes
-    end
-
   end
 end
