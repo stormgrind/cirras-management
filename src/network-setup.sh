@@ -24,3 +24,7 @@ echo -e "subnet 192.168.192.0 netmask 255.255.255.0 {\noption domain-name-server
 
 # restarting DHCP server
 /etc/init.d/dhcpd restart
+
+# restart thin management
+/etc/init.d/thin stop
+/etc/init.d/thin start

@@ -34,7 +34,9 @@ module JBossCloudManagement
     end
 
     def local_ip
-      UDPSocket.open {|s| s.connect('64.233.187.99', 1); s.addr.last }
+      address = `ip addr list eth0 | grep "inet " | cut -d' ' -f6 | cut -d/ -f1`.strip
+      return nil if address.length == 0
+      address
     end
 
     def is_port_open?(ip, port = 80)
