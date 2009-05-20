@@ -19,7 +19,7 @@ module JBossCloudManagement
 
           @log.info "Asking for front-end appliance address..."
 
-          front_end_address = @client_helper.get( "http://#{address}:#{config.port}/latest/address/#{APPLIANCE_TYPE[:frontend]}", address )
+          front_end_address = @client_helper.get( "http://#{address}:#{@config.port}/latest/address/#{APPLIANCE_TYPE[:frontend]}", address )
 
           if front_end_address.nil?
             @log.warn "Got no front-end appliance address!"

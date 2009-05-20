@@ -74,6 +74,11 @@ module JBossCloudManagement
         apis
       end
 
+      get '/*' do
+        status 404
+        "Not found"
+      end
+
       wait_for_web_server
     end
 
