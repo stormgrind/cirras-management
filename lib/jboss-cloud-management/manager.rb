@@ -96,8 +96,6 @@ module JBossCloudManagement
       end
 
       EventManager.instance.register( api_version, prefix, handler_helper.handlers )
-
-      @log.debug "Registered #{handler_helper.handlers.size} handler helpers for API version '#{api_version}' and prefix '#{prefix}'"
     end
 
     def wait_for_web_server

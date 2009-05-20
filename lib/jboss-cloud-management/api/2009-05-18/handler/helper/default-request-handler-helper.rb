@@ -6,7 +6,7 @@ module JBossCloudManagement
     def initialize( api_version, prefix, config )
       super( api_version, prefix, config )
 
-      register_handler( ManagementAddressRequestHandler.new( "/#{@prefix}/address/#{APPLIANCE_TYPE[:management]}", @config, @prefix, @api_version ), :management_address_request )
+      register_handler( :management_address_request, ManagementAddressRequestHandler.new( "/#{@prefix}/address/#{APPLIANCE_TYPE[:management]}", @config, @prefix, @api_version ) )
     end
   end
 end

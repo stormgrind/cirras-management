@@ -12,9 +12,11 @@ module JBossCloudManagement
     def register( api_version, prefix, handlers )
       @log.debug "Registering handlers for API version #{api_version} and prefix #{prefix}..."
 
-      handlers.each { |event, handler| @log.debug "Registering handler #{handler.class} for event #{event}" }
+      handlers.each { |event, array| array.each { |h| @log.debug "Registering handler #{h.class} for event #{event}" } }
 
       @event_handlers[prefix] = handlers
+
+      @log.debug "Registered #{handlers.size} handler helpers for API version '#{api_version}' and prefix '#{prefix}'"
     end
 
     def notify( prefix, event, *args )
