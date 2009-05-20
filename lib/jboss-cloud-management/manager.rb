@@ -69,7 +69,7 @@ module JBossCloudManagement
     def bind_handler( api_version, prefix = nil )
       prefix = api_version if prefix.nil?
 
-      @log.debug "Binding new request handler helper for API version '#{api_version}' and perfix '#{prefix}'..."
+      @log.debug "Binding new request handler helper for API version '#{api_version}' and prefix '#{prefix}'..."
 
       Dir["lib/jboss-cloud-management/api/#{api_version}/handler/*/*"].each {|file| require file if File.exists?( file ) }
 
@@ -79,7 +79,7 @@ module JBossCloudManagement
         handler_helper = DefaultRequestHandlerHelper.new( api_version, prefix, @config )
       end
 
-      @log.debug "Registered #{handler_helper.handlers.size} handlers for API version '#{api_version}' and perfix '#{prefix}'"
+      @log.debug "Registered #{handler_helper.handlers.size} handlers for API version '#{api_version}' and prefix '#{prefix}'"
     end
 
     def wait_for_web_server

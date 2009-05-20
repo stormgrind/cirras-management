@@ -15,11 +15,16 @@ module JBossCloudManagement
     end
 
     def notify( event, *args )
-      @log.debug "Event #{event} raised!"
-      @event_handlers[event].each do |handler|
-        handler.send event, *args
-      end unless @event_handlers[event].nil?
+      unless @event_handlers[event].nil?
+        @log.debug "Handling event #{event}..."
+        @event_handlers[event].each do |handler|
+          @log.debug "Notyfing handler #{handler}"
+          handler.send event, *args
+        end
+        @log.debug "Event #{event} finished"
+      else
+        @log.debug "No handlers for event #{event}"
+      end
     end
-
   end
 end
