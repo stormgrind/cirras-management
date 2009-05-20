@@ -1,8 +1,12 @@
+require 'jboss-cloud-management/event/event-manager'
+
 module JBossCloudManagement
   class BaseRequestHandler
-    def initialize( prefix, config )
-      @prefix   = prefix
-      @config   = config
+    def initialize( path, config, prefix, api_version )
+      @path         = path
+      @prefix       = prefix
+      @config       = config
+      @api_version  = api_version
 
       define_handle
     end

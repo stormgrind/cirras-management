@@ -48,6 +48,17 @@ module JBossCloudManagement
       enable  :raise_errors
       disable :logging
 
+      helpers do
+        def prefix
+          request.path_info.match( /^\/([\w\-]+)\// )[1]
+        end
+
+        def notify( event, *args )
+          EventManager.instance.notify( prefix, event, *args )
+        end
+
+      end
+
       for api in APIS
         bind_handler( api )
       end
@@ -79,7 +90,9 @@ module JBossCloudManagement
         handler_helper = DefaultRequestHandlerHelper.new( api_version, prefix, @config )
       end
 
-      @log.debug "Registered #{handler_helper.handlers.size} handlers for API version '#{api_version}' and prefix '#{prefix}'"
+      EventManager.instance.register( api_version, prefix, handler_helper.handlers )
+
+      @log.debug "Registered #{handler_helper.handlers.size} handler helpers for API version '#{api_version}' and prefix '#{prefix}'"
     end
 
     def wait_for_web_server

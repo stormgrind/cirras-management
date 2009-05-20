@@ -4,8 +4,8 @@ require 'jboss-cloud-management/helper/client-helper'
 
 module JBossCloudManagement
   class ManagementAddressRequestHandler < BaseRequestHandler
-    def initialize( prefix, config )
-      super( prefix, config )
+    def initialize( path, config, prefix, api_version )
+      super( path, config, prefix, api_version  )
 
       @client_helper = ClientHelper.new( @config )
     end
@@ -21,12 +21,14 @@ module JBossCloudManagement
             while true do
               @log.debug "Asking for front-end appliance address..."
 
-              front_end_address = client_helper.get( "http://#{address}:#{config.port}/latest/address/#{APPLIANCE_TYPE[:frontend]}", address )
+              front_end_address = @client_helper.get( "http://#{address}:#{config.port}/latest/address/#{APPLIANCE_TYPE[:frontend]}", address )
 
               puts front_end_address
 
-              @log.debug "Waiting #{@config.sleep} seconds before next node discovery..."
-              sleep @config.sleep # check after 30 sec if there are changes in nodes (new added, removed, etc)
+              # inject front-end appliance address to /etc/jboss-as5.conf
+
+              break unless front_end_address.nil?
+              sleep 10
             end
           end
 
@@ -36,10 +38,10 @@ module JBossCloudManagement
     end
 
     def define_handle
-      put @prefix do
+      put @path do
         pass if params[:address].nil?
 
-        EventManager.instance.notify( :management_address_request, params[:address].strip )
+        notify( :management_address_request, params[:address].strip )
       end
     end
   end

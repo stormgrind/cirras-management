@@ -9,15 +9,14 @@ module JBossCloudManagement
       @handlers     = {}
       @log          = LogHelper.instance.log
 
-      register_handler( InfoRequestHandler.new( "/#{@prefix}/info", @config ) )
+      register_handler( InfoRequestHandler.new( "/#{@prefix}/info", @config, @prefix, @api_version ), :info_request )
     end
 
     attr_reader :handlers
 
-    def register_handler( handler )
-      @log.debug "Registering handler #{handler.class} for prefix '#{handler.prefix}'..."
-
-      @handlers[handler.prefix] = handler
+    def register_handler( handler, event )
+      @handlers[event] = [] if @handlers[event].nil?
+      @handlers[event].push handler
     end
   end
 end
