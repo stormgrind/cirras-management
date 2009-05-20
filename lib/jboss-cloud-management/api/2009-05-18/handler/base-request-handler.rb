@@ -7,6 +7,7 @@ module JBossCloudManagement
       @prefix       = prefix
       @config       = config
       @api_version  = api_version
+      @log          = LogHelper.instance.log
 
       define_handle
     end
