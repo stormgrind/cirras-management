@@ -29,7 +29,7 @@ module JBossCloudManagement
       # push our local IP too
       addresses.push @ip_helper.local_ip
 
-      addresses
+      addresses.uniq
     end
   end
 end
