@@ -5,6 +5,7 @@ require 'yaml'
 require 'base64'
 require 'resolv'
 require 'jboss-cloud-management/helper/ip-helper'
+require 'jboss-cloud-management/helper/client-helper'
 require 'jboss-cloud-management/model/node'
 
 module JBossCloudManagement
@@ -15,7 +16,8 @@ module JBossCloudManagement
       @addresses  = []
       @config     = config
 
-      @ip_helper  = IPHelper.new
+      @ip_helper      = IPHelper.new
+      @client_helper  = ClientHelper.new( @config )
     end
 
     attr_reader :nodes
@@ -34,7 +36,7 @@ module JBossCloudManagement
           @log.info " \\__ ALIVE: Host #{ip} is alive, good"
           valid_addresses.push( ip )
         else
-          @log.info " \\__ DEAD: Host #{ip} hadn't responded in #{2} seconds, not so good, suspecting as dead, removing from cache"
+          @log.info " \\__ DEAD: Host #{ip} hadn't responded in #{2} seconds, not so good, suspecting as dead"
         end
       end
 
@@ -45,7 +47,7 @@ module JBossCloudManagement
 
     def log_discovery_summary( addresses )
       if addresses.size > 0
-        @log.info "Found #{addresses.size} valid address#{addresses.size > 1 ? "es" : ""}: #{addresses.join(", ")}."
+        @log.info "Found #{addresses.size} address#{addresses.size > 1 ? "es" : ""}: #{addresses.join(", ")}."
       else
         @log.info "No valid addresses found."
       end
@@ -111,52 +113,36 @@ module JBossCloudManagement
       resource = "http://#{address}:#{@config.port}"
 
       if @ip_helper.is_port_open?( address, @config.port )
-        return get( "#{resource}/latest/info", address )
+        return @client_helper.get( "#{resource}/latest/info", address )
       else
         @log.warn "Port #{@config.port} is closed on node #{address}, ignoring."
       end
       nil
     end
 
-    def get( url, address )
-      begin
-        Timeout::timeout(@config.timeout) do
-          return RestClient.get( url )
-        end
-      rescue Timeout::Error
-        @log.warn "Node #{address} hasn't replied in #{@config.timeout} seconds for GET request on #{address}."
-      end
-      nil
-    end
-
-    def put( url, address, data )
-      begin
-        Timeout::timeout(@config.timeout) do
-          RestClient.put( url, data )
-        end
-      rescue Timeout::Error
-        @log.warn "Node #{address} hasn't replied in #{@config.timeout} seconds for PUT request on #{address}."
-      end
-    end
-
     def push_management_address
-      @log.debug "Pushing management node address to nodes..."
       management_appliances = nodes_by_type( APPLIANCE_TYPE[:management] )
 
       return if management_appliances.size  == 0
 
-      address = management_appliances.first.address
-      count   = 0
+      address   = management_appliances.first.address
+      nodes     = {}
+      count     = 0
 
-      @log.debug "Management address is #{address}"
+      @nodes.each { |ip, node| nodes[ip] = node unless node.name.eql?( APPLIANCE_TYPE[:management] ) }
 
-      @nodes.each do |ip, node|
-        unless node.name.eql?( APPLIANCE_TYPE[:management] )
-          @log.debug "Pushing management node address #{address} to #{node.name} on #{ip}..."
-          put( "http://#{ip}:#{@config.port}/latest/address/#{APPLIANCE_TYPE[:management]}", ip, :address => address )
-          @log.debug "Done"
-          count += 1
-        end
+      if nodes.size == 0
+        @log.info "No nodes found to push #{APPLIANCE_TYPE[:management]} address"
+        return
+      end
+
+      @log.debug "Pushing management node address (#{address}) to #{nodes.size} nodes..."
+
+      nodes.each do |ip, node|
+        @log.debug "Pushing management node address #{address} to #{node.name} on #{ip}..."
+        @client_helper.put( "http://#{ip}:#{@config.port}/latest/address/#{APPLIANCE_TYPE[:management]}", ip, :address => address )
+        @log.debug "Done"
+        count += 1
       end
 
       @log.debug "Management node address pushed to #{count} nodes"

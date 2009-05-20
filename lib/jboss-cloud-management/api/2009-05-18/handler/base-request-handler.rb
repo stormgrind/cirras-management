@@ -1,7 +1,8 @@
 module JBossCloudManagement
   class BaseRequestHandler
-    def initialize( prefix )
+    def initialize( prefix, config )
       @prefix   = prefix
+      @config   = config
 
       define_handle
     end

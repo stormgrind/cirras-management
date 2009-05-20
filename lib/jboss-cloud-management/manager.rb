@@ -8,17 +8,14 @@ require 'jboss-cloud-management/helper/ip-helper'
 require 'jboss-cloud-management/helper/log-helper'
 require 'jboss-cloud-management/node/aws-node-manager'
 require 'jboss-cloud-management/node/default-node-manager'
+require 'jboss-cloud-management/event/event-manager'
 
 module JBossCloudManagement
 
   APPLIANCE_TYPE = {
-          :httpd          => "httpd-appliance",
-          :jbossas5       => "jboss-as5-appliance",
           :backend        => "back-end-appliance",
           :frontend       => "front-end-appliance",
-          :jbossjgroups   => "jboss-jgroups-appliance",
           :management     => "management-appliance",
-          :meta           => "meta-appliance",
           :postgis        => "postgis-appliance"
   }
 
@@ -72,17 +69,17 @@ module JBossCloudManagement
     def bind_handler( api_version, prefix = nil )
       prefix = api_version if prefix.nil?
 
+      @log.debug "Binding new request handler helper for API version '#{api_version}' and perfix '#{prefix}'..."
+
       Dir["lib/jboss-cloud-management/api/#{api_version}/handler/*/*"].each {|file| require file if File.exists?( file ) }
 
       if @config.is_management_appliance?
-        handler = ManagementApplianceRequestHandlerHelper.new( api_version, prefix )
+        handler_helper = ManagementApplianceRequestHandlerHelper.new( api_version, prefix, @config )
       else
-        handler = DefaultRequestHandlerHelper.new( api_version, prefix )
+        handler_helper = DefaultRequestHandlerHelper.new( api_version, prefix, @config )
       end
 
-      #DefaultRequestHandlerHelper.new( @api_version, @prefix ).define_handlers
-
-      handler.define_handlers
+      @log.debug "Registered #{handler_helper.handlers.size} handlers for API version '#{api_version}' and perfix '#{prefix}'"
     end
 
     def wait_for_web_server
