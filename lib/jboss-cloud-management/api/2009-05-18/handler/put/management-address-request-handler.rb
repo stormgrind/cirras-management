@@ -17,20 +17,22 @@ module JBossCloudManagement
         when APPLIANCE_TYPE[:backend]
           # if we're a back-end appliance, ask for front-end appliance address to inject it to /etc/jboss-as5.conf
 
-          Thread.new do
-            while true do
-              @log.debug "Asking for front-end appliance address..."
+          @log.info "Asking for front-end appliance address..."
 
-              front_end_address = @client_helper.get( "http://#{address}:#{config.port}/latest/address/#{APPLIANCE_TYPE[:frontend]}", address )
+          front_end_address = @client_helper.get( "http://#{address}:#{config.port}/latest/address/#{APPLIANCE_TYPE[:frontend]}", address )
 
-              puts front_end_address
-
-              # inject front-end appliance address to /etc/jboss-as5.conf
-
-              break unless front_end_address.nil?
-              sleep 10
-            end
+          if front_end_address.nil?
+            @log.warn "Got no front-end appliance address!"
+            return
           end
+
+          if @front_end_address != front_end_address
+            @log.info "Injecting front-and appliance address to /etc/jboss-as5.conf..."
+            # inject front-end appliance address to /etc/jboss-as5.conf
+
+          end
+
+          @front_end_address = front_end_address
 
         else
       end
