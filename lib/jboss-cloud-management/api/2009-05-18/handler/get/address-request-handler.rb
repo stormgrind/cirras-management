@@ -6,7 +6,10 @@ module JBossCloudManagement
       super( path, config, prefix, api_version  )
     end
 
-    def define_handle     
+    def address_request
+    end
+
+    def define_handle
       get @path do
         notify( :address_request )
 

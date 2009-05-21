@@ -12,7 +12,14 @@ module JBossCloudManagement
     def register( api_version, prefix, handlers )
       @log.debug "Registering handlers for API version #{api_version} and prefix #{prefix}..."
 
-      handlers.each { |event, array| array.each { |h| @log.debug "Registering handler #{h.class} for event #{event}" } }
+      handlers.each do |event, array|
+        array.each do |h|
+          @log.debug "Registering handler #{h.class} for event #{event}"
+          unless h.respond_to? event
+            raise NoMethodError, "Handler #{h.class} does not have method `#{event.to_s}'"
+          end
+        end
+      end
 
       @event_handlers[prefix] = handlers
 
