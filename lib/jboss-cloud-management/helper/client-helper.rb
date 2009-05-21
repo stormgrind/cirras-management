@@ -1,15 +1,20 @@
+require 'yaml'
+
 module JBossCloudManagement
   class ClientHelper
-    def initialize( config )
+    def initialize( config, log )
       @config     = config
-      @log        = LogHelper.instance.log
+      @log        = log
 
     end
 
     def get( url, address )
       begin
         Timeout::timeout(@config.timeout) do
-          return RestClient.get( url )
+          data = YAML.load( RestClient.get( url ) )
+
+          return nil if data == false
+          return data
         end
       rescue Timeout::Error
         @log.warn "Node #{address} hasn't replied in #{@config.timeout} seconds for GET request on #{address}."

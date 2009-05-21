@@ -4,8 +4,8 @@ require 'jboss-cloud-management/api/2009-05-18/handler/base-request-handler'
 
 module JBossCloudManagement
   class InfoRequestHandler < BaseRequestHandler
-    def initialize( path, config, prefix, api_version )
-      super( path, config, prefix, api_version  )
+    def initialize( path, to )
+      super( path, to )
     end
 
     def info_request

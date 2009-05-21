@@ -9,6 +9,7 @@ require 'jboss-cloud-management/helper/log-helper'
 require 'jboss-cloud-management/node/aws-node-manager'
 require 'jboss-cloud-management/node/default-node-manager'
 require 'jboss-cloud-management/event/event-manager'
+require 'jboss-cloud-management/api/2009-05-18/handler/handler-to'
 
 module JBossCloudManagement
 
@@ -23,10 +24,11 @@ module JBossCloudManagement
 
   class Manager
     def initialize
-      @config           = Config.new
-      @@config          = @config
 
       @log = LogHelper.instance.log
+
+      @config           = Config.new( @log )
+      @@config          = @config
 
       @log.info "Setting up management environment for #{@config.appliance_name}"
 
@@ -89,10 +91,12 @@ module JBossCloudManagement
 
       Dir["lib/jboss-cloud-management/api/#{api_version}/handler/*/*"].each {|file| require file if File.exists?( file ) }
 
+      to = HandlerTO.new( prefix, api_version, @config, @log )
+
       if @config.is_management_appliance?
-        handler_helper = ManagementApplianceRequestHandlerHelper.new( api_version, prefix, @config )
+        handler_helper = ManagementApplianceRequestHandlerHelper.new( to )
       else
-        handler_helper = DefaultRequestHandlerHelper.new( api_version, prefix, @config )
+        handler_helper = DefaultRequestHandlerHelper.new( to )
       end
 
       EventManager.instance.register( api_version, prefix, handler_helper.handlers )

@@ -4,8 +4,8 @@ require 'restclient'
 
 module JBossCloudManagement
   class ConfigHelper
-    def initialize
-      @log = LogHelper.instance.log
+    def initialize( log )
+      @log = log
     end
 
     def is_ec2?

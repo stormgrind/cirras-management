@@ -17,7 +17,7 @@ module JBossCloudManagement
       @config     = config
 
       @ip_helper      = IPHelper.new
-      @client_helper  = ClientHelper.new( @config )
+      @client_helper  = ClientHelper.new( @config, @log )
     end
 
     attr_reader :nodes
@@ -63,14 +63,9 @@ module JBossCloudManagement
       node_list = []
 
       for address in @addresses
-        info = get_info_from_node( address )
+        node = get_info_from_node( address )
 
-        # if we got no response from node go to next node
-        next if info.nil?
-
-        node = YAML.load( info )
-
-        unless node == false or node.class.eql?(Node)
+        if node.nil? or !node.class.eql?(Node)
           @log.info "Not a valid response from node #{address}, ignoring."
           next
         end

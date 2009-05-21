@@ -1,10 +1,14 @@
 require 'jboss-cloud-management/helper/config-helper'
+require 'jboss-cloud-management/model/node'
+require 'sinatra'
 
 module JBossCloudManagement
 
   class Config
 
-    def initialize
+    def initialize( log )
+      @log = log
+
       config = YAML.load_file( "/etc/jboss-cloud" )
       raise "Invalid config file!" unless config
 
@@ -16,7 +20,7 @@ module JBossCloudManagement
 
       @appliance_name   = config['appliance_name']
       @node             = Node.new( @appliance_name )
-      @config_helper    = ConfigHelper.new
+      @config_helper    = ConfigHelper.new( @log )
       @running_on_ec2   = @config_helper.is_ec2?
 
       @rack_config      = YAML.load_file( "config/config.yaml" )
@@ -32,10 +36,11 @@ module JBossCloudManagement
     attr_reader :running_on_ec2
     attr_reader :port
     attr_reader :timeout
-    attr_reader :appliance_name
     attr_reader :sleep
     attr_reader :leases_file
     attr_reader :node
+
+    attr_accessor :appliance_name
 
     def is_management_appliance?
       @appliance_name.eql?(APPLIANCE_TYPE[:management])

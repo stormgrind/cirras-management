@@ -2,14 +2,15 @@ require 'jboss-cloud-management/api/2009-05-18/handler/get/info-request-handler'
 
 module JBossCloudManagement
   class BaseRequestHandlerHelper
-    def initialize( api_version, prefix, config )
-      @api_version  = api_version
-      @prefix       = prefix
-      @config       = config
+    def initialize( to )
+      @to           = to
+      @api_version  = to.api_version
+      @prefix       = to.prefix
+      @config       = to.config
+      @log          = to.log
       @handlers     = {}
-      @log          = LogHelper.instance.log
 
-      register_handler( :info_request, InfoRequestHandler.new( "/#{@prefix}/info", @config, @prefix, @api_version ) )
+      register_handler( :info_request, InfoRequestHandler.new( "/#{@prefix}/info", @to ) )
     end
 
     attr_reader :handlers

@@ -3,10 +3,10 @@ require 'jboss-cloud-management/api/2009-05-18/handler/get/address-request-handl
 
 module JBossCloudManagement
   class ManagementApplianceRequestHandlerHelper < BaseRequestHandlerHelper
-    def initialize( api_version, prefix, config )
-      super( api_version, prefix, config )
+    def initialize( to )
+      super( to )
 
-      register_handler( :address_request, AddressRequestHandler.new( "/#{@prefix}/address/:appliance", @config, @prefix, @api_version ) )
+      register_handler( :address_request, AddressRequestHandler.new( "/#{@prefix}/address/:appliance", @to ) )
     end
   end
 end
