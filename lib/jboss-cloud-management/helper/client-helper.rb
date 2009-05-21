@@ -11,7 +11,7 @@ module JBossCloudManagement
     def get( url, address )
       begin
         Timeout::timeout(@config.timeout) do
-          data = YAML.load( RestClient.get( url ) )
+          data = YAML.load( RestClient.get( url ).to_s )
 
           return nil if data == false
           return data

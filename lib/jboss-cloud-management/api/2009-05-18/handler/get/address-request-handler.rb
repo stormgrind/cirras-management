@@ -17,6 +17,10 @@ module JBossCloudManagement
         Manager.node_manager.nodes_by_type( params[:appliance] ).each do |node|
           addresses.push( node.address )
         end
+
+        # just for testing:
+        addresses.push "127.0.0.1"
+
         addresses.to_yaml
       end
     end

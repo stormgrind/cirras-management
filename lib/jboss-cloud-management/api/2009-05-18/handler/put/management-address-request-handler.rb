@@ -30,6 +30,11 @@ module JBossCloudManagement
             return
           end
 
+          if front_end_addresses.size == 0
+            @log.info "No front-end appliances running, skipping."
+            return
+          end
+
           front_end_address = front_end_addresses.first
 
           if @front_end_address != front_end_address
@@ -57,14 +62,14 @@ module JBossCloudManagement
               jboss_as5_conf.gsub!( pattern, directive  )
             end
 
-            `sudo echo "#{jboss_as5_conf}" | sudo tee #{@jboss_as5_conf_file}`
+            `sudo sh -c "echo '#{jboss_as5_conf}' > #{@jboss_as5_conf_file}"`
 
             Thread.new do
               @log.info "Stopping jboss-as5 service..."
               `sudo /sbin/service jboss-as5 stop`
 
               unless $?.to_i == 0
-                @log.error "Service jboss-as5 stopping failed. Check system logs."
+                @log.error "Service jboss-as5 stopping failed or jboss-as5 was not running."
               else
                 @log.info "Service jboss-as5 successfully stopped."
               end
