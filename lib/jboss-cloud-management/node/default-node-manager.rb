@@ -1,4 +1,3 @@
-require 'EC2'
 require 'jboss-cloud-management/node/base-node-manager'
 
 module JBossCloudManagement

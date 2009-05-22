@@ -1,6 +1,5 @@
 require 'jboss-cloud-management/helper/config-helper'
 require 'jboss-cloud-management/model/node'
-require 'sinatra'
 
 module JBossCloudManagement
 

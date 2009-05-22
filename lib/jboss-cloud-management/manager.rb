@@ -1,6 +1,3 @@
-require 'rubygems'
-require 'fastthread'
-require 'sinatra'
 require 'yaml'
 
 require 'jboss-cloud-management/config'
@@ -10,6 +7,8 @@ require 'jboss-cloud-management/node/aws-node-manager'
 require 'jboss-cloud-management/node/default-node-manager'
 require 'jboss-cloud-management/event/event-manager'
 require 'jboss-cloud-management/api/2009-05-18/handler/handler-to'
+
+require 'sinatra'
 
 module JBossCloudManagement
 

@@ -1,0 +1,11 @@
+#!/usr/bin/env ruby
+# Thin command line interface script.
+# Run <tt>thin -h</tt> to get more usage.
+
+require 'additional-libs'
+
+#$LOAD_PATH.unshift( "#{File.dirname( __FILE__ )}/lib/thin/ext" )
+
+require File.dirname(__FILE__) + '/lib/thin/lib/thin'
+
+Thin::Runner.new(ARGV).run!
