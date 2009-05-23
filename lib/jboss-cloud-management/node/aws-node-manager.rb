@@ -44,7 +44,7 @@ module JBossCloudManagement
 
       for reservation in instances.reservationSet.item
         for instance in reservation.instancesSet.item
-          addresses.push( instance.privateDnsName.strip )
+          addresses.push( instance.privateDnsName.strip ) if instance.instanceState.name.eql?('running')
         end
       end
 
