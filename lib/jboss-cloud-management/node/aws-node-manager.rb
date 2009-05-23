@@ -1,4 +1,4 @@
-#require 'EC2'
+require 'EC2'
 require 'jboss-cloud-management/node/base-node-manager'
 
 module JBossCloudManagement
@@ -8,11 +8,26 @@ module JBossCloudManagement
 
       @ec2_config_file = "/home/#{@config.rack_config['user']}/.jboss-cloud/ec2"
 
+      @aws_data = {}
+
+      get_aws_data
+
       validate_aws_config
 
       @ec2 = EC2::Base.new(:access_key_id => @aws_data['access_key'], :secret_access_key => @aws_data['secret_access_key'])
       # just for test if credentials are valid
       @ec2.describe_availability_zones
+    end
+
+    def get_aws_data
+      data = @client_helper.get( "http://169.254.169.254/latest/user-data" )
+
+      puts data
+
+      unless data.nil? and data.class.eql?(Hash)
+        puts "tak"
+      end
+      
     end
 
     def validate_aws_config

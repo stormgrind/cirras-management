@@ -1,3 +1,4 @@
+require 'base64'
 require 'jboss-cloud-management/event/event-manager'
 
 module JBossCloudManagement

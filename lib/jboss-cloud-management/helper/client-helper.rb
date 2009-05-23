@@ -1,4 +1,5 @@
 require 'yaml'
+require 'base64'
 
 module JBossCloudManagement
   class ClientHelper
@@ -11,7 +12,7 @@ module JBossCloudManagement
     def get( url, address )
       begin
         Timeout::timeout(@config.timeout) do
-          data = YAML.load( RestClient.get( url ).to_s )
+          data = YAML.load( Base64.b64decode( RestClient.get( url ).to_s ))
 
           return nil if data == false
           return data

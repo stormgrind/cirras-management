@@ -15,7 +15,7 @@ module JBossCloudManagement
       get @path do
         notify( :info_request )
 
-        Manager.config.node.to_yaml
+        Base64.b64encode( Manager.config.node.to_yaml )
       end
     end
   end
