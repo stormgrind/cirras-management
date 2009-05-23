@@ -108,7 +108,7 @@ module JBossCloudManagement
       resource = "http://#{address}:#{@config.port}"
 
       if @ip_helper.is_port_open?( address, @config.port )
-        return @client_helper.get( "#{resource}/latest/info", address )
+        return @client_helper.get( "#{resource}/latest/info" )
       else
         @log.warn "Port #{@config.port} is closed on node #{address}, ignoring."
       end
@@ -135,7 +135,7 @@ module JBossCloudManagement
 
       nodes.each do |ip, node|
         @log.debug "Pushing management node address #{address} to #{node.name} on #{ip}..."
-        @client_helper.put( "http://#{ip}:#{@config.port}/latest/address/#{APPLIANCE_TYPE[:management]}", ip, :address => address )
+        @client_helper.put( "http://#{ip}:#{@config.port}/latest/address/#{APPLIANCE_TYPE[:management]}", :address => address )
         @log.debug "Done"
         count += 1
       end

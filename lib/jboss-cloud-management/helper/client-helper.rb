@@ -9,7 +9,7 @@ module JBossCloudManagement
 
     end
 
-    def get( url, address )
+    def get( url )
       begin
         Timeout::timeout(@config.timeout) do
           data = YAML.load( Base64.b64decode( RestClient.get( url ).to_s ))
@@ -18,18 +18,18 @@ module JBossCloudManagement
           return data
         end
       rescue Timeout::Error
-        @log.warn "Node #{address} hasn't replied in #{@config.timeout} seconds for GET request on #{address}."
+        @log.warn "We don't have any response for #{url} in #{@config.timeout} seconds for GET request."
       end
       nil
     end
 
-    def put( url, address, data )
+    def put( url, data )
       begin
         Timeout::timeout(@config.timeout) do
           RestClient.put( url, data )
         end
       rescue Timeout::Error
-        @log.warn "Node #{address} hasn't replied in #{@config.timeout} seconds for PUT request on #{address}."
+        @log.warn "We don't have any response for #{url} in #{@config.timeout} seconds for PUT request."
       end
     end
   end

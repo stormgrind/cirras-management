@@ -23,7 +23,7 @@ module JBossCloudManagement
 
           @log.info "Asking for front-end appliance address..."
 
-          front_end_addresses = @client_helper.get( "http://#{address}:#{@config.port}/latest/address/#{APPLIANCE_TYPE[:frontend]}", address )
+          front_end_addresses = @client_helper.get( "http://#{address}:#{@config.port}/latest/address/#{APPLIANCE_TYPE[:frontend]}" )
 
           if front_end_addresses.nil? or !front_end_addresses.class.eql?(Array)
             @log.warn "Got no valid response from management-appliance!"
