@@ -6,12 +6,9 @@ module JBossCloudManagement
     def initialize( config )
       super( config )
 
-      @ec2_config_file = "/home/#{@config.rack_config['user']}/.jboss-cloud/ec2"
-
       @aws_data = {}
 
       get_aws_data
-
       validate_aws_config
 
       @ec2 = EC2::Base.new(:access_key_id => @aws_data['access_key'], :secret_access_key => @aws_data['secret_access_key'])
@@ -22,22 +19,15 @@ module JBossCloudManagement
     def get_aws_data
       data = @client_helper.get( "http://169.254.169.254/latest/user-data" )
 
-      puts data
-
       unless data.nil? and data.class.eql?(Hash)
-        puts "tak"
+        @aws_data = data
       end
-      
+     
     end
 
     def validate_aws_config
-      raise "Configuration file #{@ec2_config_file}, doesn't exists. Please create it."  unless File.exists?( @ec2_config_file )
-
-      @aws_data = YAML.load_file( @ec2_config_file )
-
-      raise "Invalid configuration file #{@ec2_config_file}, please check structure of this file." unless @aws_data
-      raise "Please specify access key in aws section in configuration file #{@ec2_config_file}: access_key: YOUR_ACCESS_KEY" if @aws_data['access_key'].nil?
-      raise "Please specify secret access key in aws section in configuration file #{@ec2_config_file}: secret_access_key: YOUR_SECRET_ACCESS_KEY" if @aws_data['secret_access_key'].nil?
+      raise "Please provide access key as user data while launching thi AMI: access_key: YOUR_ACCESS_KEY" if @aws_data['access_key'].nil?
+      raise "Please provide secret access key as user data while launching thi AMI: secret_access_key: YOUR_SECRET_ACCESS_KEY" if @aws_data['secret_access_key'].nil?
     end
 
     def node_addresses
