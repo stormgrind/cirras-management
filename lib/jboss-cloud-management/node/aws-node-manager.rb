@@ -17,17 +17,13 @@ module JBossCloudManagement
     end
 
     def get_aws_data
-      data = @client_helper.get( "http://169.254.169.254/latest/user-data" )
-
-      unless data.nil? and data.class.eql?(Hash)
-        @aws_data = data
-      end
-     
+      @aws_data = @client_helper.get( "http://169.254.169.254/latest/user-data" )    
     end
 
     def validate_aws_config
-      raise "Please provide access key as user data while launching thi AMI: access_key: YOUR_ACCESS_KEY" if @aws_data['access_key'].nil?
-      raise "Please provide secret access key as user data while launching thi AMI: secret_access_key: YOUR_SECRET_ACCESS_KEY" if @aws_data['secret_access_key'].nil?
+      raise "Please provide access keys as user data while launching this AMI. You must relaunch this AMI with valid user data." if @aws_data.nil?
+      raise "Please provide access key as user data while launching this AMI: access_key: YOUR_ACCESS_KEY" if @aws_data['access_key'].nil?
+      raise "Please provide secret access key as user data while launching this AMI: secret_access_key: YOUR_SECRET_ACCESS_KEY" if @aws_data['secret_access_key'].nil?
     end
 
     def node_addresses
