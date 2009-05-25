@@ -17,8 +17,8 @@ module JBossCloudManagement
           return nil if data == false
           return data
         end
-      rescue Timeout::Error
-        @log.warn "We don't have any response for #{url} in #{@config.timeout} seconds for GET request."
+      rescue StandardError => err
+        @log.warn "An error occured: #{err}"
       end
       nil
     end
@@ -28,8 +28,8 @@ module JBossCloudManagement
         Timeout::timeout(@config.timeout) do
           RestClient.put( url, data )
         end
-      rescue Timeout::Error
-        @log.warn "We don't have any response for #{url} in #{@config.timeout} seconds for PUT request."
+      rescue StandardError => err
+        @log.warn "An error occured: #{err}"
       end
     end
   end
