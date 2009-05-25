@@ -25,6 +25,7 @@ if [ "$address" == "" ]; then
         # restarting DHCP server
         /etc/init.d/dhcpd restart
     else
+        /etc/init.d/network restart 
         sleep 10
         sh $network_script
         exit       

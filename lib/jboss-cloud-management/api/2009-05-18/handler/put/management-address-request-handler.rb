@@ -32,6 +32,11 @@ module JBossCloudManagement
 
           if front_end_addresses.size == 0
             @log.info "No front-end appliances running, skipping."
+
+            Thread.new do
+              jboss_stop
+            end
+
             return
           end
 
@@ -65,29 +70,36 @@ module JBossCloudManagement
             `sudo sh -c "echo '#{jboss_as5_conf}' > #{@jboss_as5_conf_file}"`
 
             Thread.new do
-              @log.info "Stopping jboss-as5 service..."
-              `sudo /sbin/service jboss-as5 stop`
-
-              unless $?.to_i == 0
-                @log.error "Service jboss-as5 stopping failed or jboss-as5 was not running."
-              else
-                @log.info "Service jboss-as5 successfully stopped."
-              end
-
-              @log.info "Starting jboss-as5 service..."
-              `sudo /sbin/service jboss-as5 start`
-
-              unless $?.to_i == 0
-                @log.error "Service jboss-as5 starting failed. Check system logs."
-              else
-                @log.info "Service jboss-as5 successfully started."
-              end
+              jboss_stop
+              jboss_start
             end
           end
         else
 
       end
 
+    end
+
+    def jboss_stop
+      @log.info "Stopping jboss-as5 service..."
+      `sudo /sbin/service jboss-as5 stop`
+
+      unless $?.to_i == 0
+        @log.error "Service jboss-as5 stopping failed or jboss-as5 was not running."
+      else
+        @log.info "Service jboss-as5 successfully stopped."
+      end
+    end
+
+    def jboss_start
+      @log.info "Starting jboss-as5 service..."
+      `sudo /sbin/service jboss-as5 start`
+
+      unless $?.to_i == 0
+        @log.error "Service jboss-as5 starting failed. Check system logs."
+      else
+        @log.info "Service jboss-as5 successfully started."
+      end
     end
 
     def define_handle
