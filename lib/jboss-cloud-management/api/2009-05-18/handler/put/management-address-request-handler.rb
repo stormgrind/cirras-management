@@ -74,6 +74,7 @@ module JBossCloudManagement
                 @log.info "Service jboss-as5 successfully stopped."
               end
 
+              @log.info "Starting jboss-as5 service..."
               `sudo /sbin/service jboss-as5 start`
 
               unless $?.to_i == 0
