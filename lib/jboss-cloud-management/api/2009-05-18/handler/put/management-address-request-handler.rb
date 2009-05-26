@@ -53,18 +53,29 @@ module JBossCloudManagement
               return
             end
 
-            jboss_as5_conf = File.read( @jboss_as5_conf_file )
+            jboss_as5_conf  = File.read( @jboss_as5_conf_file )
 
-            pattern = /^JBOSS_PROXY_LIST=(.*)/
-            matches = jboss_as5_conf.match( pattern )
+            pattern_proxy   = /^JBOSS_PROXY_LIST=(.*)/
+            pattern_gossip  = /^JBOSS_GOSSIP_HOST=(.*)/
 
-            directive = "JBOSS_PROXY_LIST=#{@front_end_address}:80"
+            matches_proxy   = jboss_as5_conf.match( pattern_proxy )
+            matches_gossip  = jboss_as5_conf.match( pattern_gossip )
 
-            if matches.nil?
+            directive_proxy   = "JBOSS_PROXY_LIST=#{@front_end_address}:80"
+            directive_gossip  = "JBOSS_GOSSIP_HOST=#{@front_end_address}"
+
+            if matches_proxy.nil?
               # no JBOSS_PROXY_LIST line, adding one
-              jboss_as5_conf += "\n\n#{directive}"
+              jboss_as5_conf += "\n\n#{directive_proxy}"
             else
-              jboss_as5_conf.gsub!( pattern, directive  )
+              jboss_as5_conf.gsub!( pattern_proxy, directive_proxy  )
+            end
+
+            if matches_gossip.nil?
+              # no JBOSS_GOSSIP_HOST line, adding one
+              jboss_as5_conf += "\n\n#{directive_gossip}"
+            else
+              jboss_as5_conf.gsub!( pattern_gossip, directive_gossip  )
             end
 
             `sudo sh -c "echo '#{jboss_as5_conf}' > #{@jboss_as5_conf_file}"`
