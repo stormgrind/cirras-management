@@ -91,12 +91,12 @@ module JBossCloudManagement
               jboss_as5_conf.gsub!( pattern_proxy, directive_proxy  )
             end
 
-            #            if matches_gossip.nil?
-            #              # no JBOSS_GOSSIP_HOST line, adding one
-            #              jboss_as5_conf += "\n\n#{directive_gossip}"
-            #            else
-            #              jboss_as5_conf.gsub!( pattern_gossip, directive_gossip  )
-            #            end
+            if matches_gossip.nil?
+              # no JBOSS_GOSSIP_HOST line, adding one
+              jboss_as5_conf += "\n\n#{directive_gossip}"
+            else
+              jboss_as5_conf.gsub!( pattern_gossip, directive_gossip  )
+            end
 
             `sudo sh -c "echo '#{jboss_as5_conf}' > #{@jboss_as5_conf_file}"`
 
