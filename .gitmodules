@@ -4,15 +4,6 @@
 [submodule "lib/sinatra"]
 	path = lib/sinatra
 	url = git://github.com/sinatra/sinatra.git
-[submodule "lib/thin"]
-	path = lib/thin
-	url = git://github.com/macournoyer/thin.git
-[submodule "lib/eventmachine"]
-	path = lib/eventmachine
-	url = git://github.com/eventmachine/eventmachine.git
-[submodule "lib/rack"]
-	path = lib/rack
-	url = git://github.com/rack/rack.git
 [submodule "lib/rest-client"]
 	path = lib/rest-client
 	url = git://github.com/adamwiggins/rest-client.git

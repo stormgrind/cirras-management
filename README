@@ -1,5 +1,2 @@
 Required gems to run this project:
-  - amazon-ec2
-  - thin
-  - sinatra
-  - rest-client
+  - thin >= 1.0.0
