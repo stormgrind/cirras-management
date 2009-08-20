@@ -37,6 +37,20 @@ module JBossCloudManagement
     def management_address_request( address )
       @log.info "Got new management-appliance address: #{address}"
 
+      if @management_address != address
+        @management_address = address
+
+        if File.exists?("/etc/init.d/jopr-agent")
+
+          `sudo sh -c "echo 'JOPR_SERVER_IP=#{address}' > /etc/sysconfig/jopr-agent"`
+
+          Thread.new do
+            stop_jopr_agent
+            start_jopr_agent
+          end
+        end
+      end
+
       case @config.appliance_name
         when APPLIANCE_TYPE[:backend]
           # if we're a back-end appliance, ask for front-end appliance address to inject it to /etc/jboss-as5.conf
@@ -109,6 +123,28 @@ module JBossCloudManagement
 
       end
 
+    end
+
+    def start_jopr_agent
+      @log.info "Starting JOPR agent..."
+      `sudo /sbin/service jopr-agent start`
+
+      unless $?.to_i == 0
+        @log.error "JOPR agent starting failed. Check system logs."
+      else
+        @log.info "JOPR agent successfully started."
+      end
+    end
+
+    def stop_jopr_agent
+      @log.info "Stopping JOPR agent..."
+      `sudo /sbin/service jopr-agent stop`
+
+      unless $?.to_i == 0
+        @log.error "JOPR agent stopping failed or JOPR agent was not running."
+      else
+        @log.info "JOPR agent successfully stopped."
+      end
     end
 
     def jboss_stop
