@@ -31,12 +31,14 @@ module JBossCloudManagement
 
     def get( url )
       begin
-        Timeout::timeout(@config.timeout) do
-          data = YAML.load( Base64.decode64( RestClient.get( url ).to_s ))
+        t_timer = Thread.new { sleep @config.timeout; raise "Timeout exceeded while getting information from url '#{url}'" }
 
-          return nil if data == false
-          return data
-        end
+        data = YAML.load( Base64.decode64( RestClient.get( url ).to_s ))
+
+        t_timer.kill
+
+        return nil if data == false
+        return data
       rescue StandardError => err
         @log.warn "An error occured: #{err}"
       end
@@ -45,9 +47,12 @@ module JBossCloudManagement
 
     def put( url, data )
       begin
-        Timeout::timeout(@config.timeout) do
-          RestClient.put( url, data )
-        end
+        t_timer = Thread.new { sleep @config.timeout; raise "Timeout exceeded while putting information to url '#{url}'" }
+
+        RestClient.put( url, data )
+
+        t_timer.kill
+
       rescue StandardError => err
         @log.warn "An error occured: #{err}"
       end
