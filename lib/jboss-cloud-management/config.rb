@@ -35,7 +35,7 @@ module JBossCloudManagement
 
       @port             = 4545          # port used to listen on
       @timeout          = 2             # time to wait for response from other node (in seconds)
-      @sleep            = 30            # time to wait before next node querying
+      @sleep            = 20            # time to wait before next node querying
 
       @appliance_name   = config['appliance_name']
       @node             = Node.new( @appliance_name )
