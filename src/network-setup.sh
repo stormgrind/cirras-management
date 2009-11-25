@@ -1,8 +1,8 @@
 #/bin/sh
 
 address=`ip addr list eth0 | grep "inet " | cut -d' ' -f6 | cut -d/ -f1`
-appliance_name=`awk '{ print $2 }' /etc/jboss-cloud`
-network_script="/usr/share/jboss-cloud-management/src/network-setup.sh"
+appliance_name=`awk '{ print $2 }' /etc/cirras`
+network_script="/usr/share/cirras-management/src/network-setup.sh"
 
 if [ "$address" == "" ]; then
     if [ "$appliance_name" == "management-appliance" ]; then
@@ -33,5 +33,5 @@ if [ "$address" == "" ]; then
 fi
 
 # start thin management
-cd /usr/share/jboss-cloud-management
+cd /usr/share/cirras-management
 ruby thin -C config/config.yaml start

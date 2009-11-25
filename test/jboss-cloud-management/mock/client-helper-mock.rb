@@ -1,6 +1,6 @@
 require 'jboss-cloud-management/helper/client-helper'
 
-module JBossCloudManagement
+module CirrASManagement
   class ClientHelperMock < ClientHelper
 
     def get( url, address )

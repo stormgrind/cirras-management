@@ -18,44 +18,24 @@
 # Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 # 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
-require 'yaml'
-require 'base64'
+require 'cirras-management/model/node'
+require 'cirras-management/event/event-manager'
+require 'cirras-management/api/2009-05-18/handler/base-request-handler'
 
-module JBossCloudManagement
-  class ClientHelper
-    def initialize( config, log )
-      @config     = config
-      @log        = log
-
+module CirrASManagement
+  class InfoRequestHandler < BaseRequestHandler
+    def initialize( path, to )
+      super( path, to )
     end
 
-    def get( url )
-      t_current = Thread.current
-      begin
-        t_timer = Thread.new { sleep @config.timeout; t_current.raise "Timeout exceeded while getting information from url '#{url}'" }
-
-        data = YAML.load( Base64.decode64( RestClient.get( url ).to_s ))
-
-        return nil if data == false
-        return data
-      rescue StandardError => err
-        @log.warn "An error occured: #{err}"
-      ensure
-        t_timer.kill
-      end
-      nil
+    def info_request
     end
 
-    def put( url, data )
-      t_current = Thread.current
-      begin
-        t_timer = Thread.new { sleep @config.timeout; t_current.raise "Timeout exceeded while putting information to url '#{url}'" }
+    def define_handle
+      get @path do
+        notify( :info_request )
 
-        RestClient.put( url, data )
-      rescue StandardError => err
-        @log.warn "An error occured: #{err}"
-      ensure
-        t_timer.kill
+        Base64.encode64( Manager.config.node.to_yaml )
       end
     end
   end

@@ -20,7 +20,7 @@
 
 require 'singleton'
 
-module JBossCloudManagement
+module CirrASManagement
   class EventManager
     include Singleton
 

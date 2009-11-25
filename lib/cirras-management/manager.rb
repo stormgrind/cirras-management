@@ -20,17 +20,17 @@
 
 require 'yaml'
 
-require 'jboss-cloud-management/config'
-require 'jboss-cloud-management/helper/ip-helper'
-require 'jboss-cloud-management/helper/log-helper'
-require 'jboss-cloud-management/node/aws-node-manager'
-require 'jboss-cloud-management/node/default-node-manager'
-require 'jboss-cloud-management/event/event-manager'
-require 'jboss-cloud-management/api/2009-05-18/handler/handler-to'
+require 'cirras-management/config'
+require 'cirras-management/helper/ip-helper'
+require 'cirras-management/helper/log-helper'
+require 'cirras-management/node/aws-node-manager'
+require 'cirras-management/node/default-node-manager'
+require 'cirras-management/event/event-manager'
+require 'cirras-management/api/2009-05-18/handler/handler-to'
 
 require 'sinatra'
 
-module JBossCloudManagement
+module CirrASManagement
 
   APPLIANCE_TYPE = {
           :backend        => "back-end-appliance",
@@ -108,7 +108,7 @@ module JBossCloudManagement
 
       @log.debug "Binding new request handler helper for API version '#{api_version}' and prefix '#{prefix}'..."
 
-      Dir["lib/jboss-cloud-management/api/#{api_version}/handler/*/*"].each {|file| require file if File.exists?( file ) }
+      Dir["lib/cirras-management/api/#{api_version}/handler/*/*"].each {|file| require file if File.exists?( file ) }
 
       to = HandlerTO.new( prefix, api_version, @config, @log )
 

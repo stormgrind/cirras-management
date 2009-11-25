@@ -18,25 +18,19 @@
 # Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 # 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
-require 'jboss-cloud-management/model/node'
-require 'jboss-cloud-management/event/event-manager'
-require 'jboss-cloud-management/api/2009-05-18/handler/base-request-handler'
-
-module JBossCloudManagement
-  class InfoRequestHandler < BaseRequestHandler
-    def initialize( path, to )
-      super( path, to )
+module CirrASManagement
+  class HandlerTO
+    def initialize( prefix, api_version, config, log )
+      @prefix       = prefix
+      @api_version  = api_version
+      @config       = config
+      @log          = log
     end
 
-    def info_request
-    end
-
-    def define_handle
-      get @path do
-        notify( :info_request )
-
-        Base64.encode64( Manager.config.node.to_yaml )
-      end
-    end
+    attr_reader :prefix
+    attr_reader :api_version
+    attr_reader :log
+    attr_reader :config
+    attr_reader :log
   end
 end

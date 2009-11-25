@@ -18,11 +18,11 @@
 # Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 # 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
-require 'jboss-cloud-management/api/2009-05-18/handler/base-request-handler'
-require 'jboss-cloud-management/helper/log-helper'
-require 'jboss-cloud-management/helper/client-helper'
+require 'cirras-management/api/2009-05-18/handler/base-request-handler'
+require 'cirras-management/helper/log-helper'
+require 'cirras-management/helper/client-helper'
 
-module JBossCloudManagement
+module CirrASManagement
   class ManagementAddressRequestHandler < BaseRequestHandler
     def initialize( path, to )
       super( path, to )

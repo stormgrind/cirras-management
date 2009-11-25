@@ -18,26 +18,45 @@
 # Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 # 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
-require 'jboss-cloud-management/api/2009-05-18/handler/get/info-request-handler'
+require 'yaml'
+require 'base64'
 
-module JBossCloudManagement
-  class BaseRequestHandlerHelper
-    def initialize( to )
-      @to           = to
-      @api_version  = to.api_version
-      @prefix       = to.prefix
-      @config       = to.config
-      @log          = to.log
-      @handlers     = {}
+module CirrASManagement
+  class ClientHelper
+    def initialize( config, log )
+      @config     = config
+      @log        = log
 
-      register_handler( :info_request, InfoRequestHandler.new( "/#{@prefix}/info", @to ) )
     end
 
-    attr_reader :handlers
+    def get( url )
+      t_current = Thread.current
+      begin
+        t_timer = Thread.new { sleep @config.timeout; t_current.raise "Timeout exceeded while getting information from url '#{url}'" }
 
-    def register_handler( event, handler )
-      @handlers[event] = [] if @handlers[event].nil?
-      @handlers[event].push handler
+        data = YAML.load( Base64.decode64( RestClient.get( url ).to_s ))
+
+        return nil if data == false
+        return data
+      rescue StandardError => err
+        @log.warn "An error occured: #{err}"
+      ensure
+        t_timer.kill
+      end
+      nil
+    end
+
+    def put( url, data )
+      t_current = Thread.current
+      begin
+        t_timer = Thread.new { sleep @config.timeout; t_current.raise "Timeout exceeded while putting information to url '#{url}'" }
+
+        RestClient.put( url, data )
+      rescue StandardError => err
+        @log.warn "An error occured: #{err}"
+      ensure
+        t_timer.kill
+      end
     end
   end
 end

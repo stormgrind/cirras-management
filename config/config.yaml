@@ -1,14 +1,14 @@
 ---
   environment: production
-  chdir:  /usr/share/jboss-cloud-management
+  chdir:  /home/oddthesis/git/cirras-management #/usr/share/cirras-management
   address: 0.0.0.0
-  user: thin
-  group: thin
+  user: oddthesis # thin
+  group: oddthesis # thin
   port: 4545
-  pid: /var/lock/jboss-cloud-management.pid
+  pid: /var/lock/cirras-management.pid
   rackup: config.ru
-  log: /var/log/jboss-cloud-management/thin.log
+  log: /var/log/cirras-management/thin.log
   max_conns: 100
   timeout: 30
   max_persistent_conns: 100
-  daemonize: true
+  daemonize: false # true

@@ -19,9 +19,9 @@
 # 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
 require 'EC2'
-require 'jboss-cloud-management/node/base-node-manager'
+require 'cirras-management/node/base-node-manager'
 
-module JBossCloudManagement
+module CirrASManagement
   class AWSNodeManager < BaseNodeManager
     def initialize( config )
       super( config )

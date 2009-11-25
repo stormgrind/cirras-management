@@ -18,36 +18,26 @@
 # Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 # 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
-require 'jboss-cloud-management/helper/ip-helper'
-require 'jboss-cloud-management/helper/log-helper'
-require 'restclient'
+require 'cirras-management/api/2009-05-18/handler/get/info-request-handler'
 
-module JBossCloudManagement
-  class ConfigHelper
-    def initialize( log )
-      @log = log
+module CirrASManagement
+  class BaseRequestHandlerHelper
+    def initialize( to )
+      @to           = to
+      @api_version  = to.api_version
+      @prefix       = to.prefix
+      @config       = to.config
+      @log          = to.log
+      @handlers     = {}
+
+      register_handler( :info_request, InfoRequestHandler.new( "/#{@prefix}/info", @to ) )
     end
 
-    def is_ec2?
-      @log.info "Discovering if we're on EC2..."
+    attr_reader :handlers
 
-      is_ec2 = false
-
-      begin
-        # trying to get local IP on EC2
-        RestClient.get 'http://169.254.169.254/latest/meta-data/local-ipv4'
-        is_ec2 = true
-      rescue
-      end
-
-      if is_ec2
-        @log.info "We're on EC2!"
-      else
-        @log.info "We're not on EC2!"
-      end
-
-      is_ec2
+    def register_handler( event, handler )
+      @handlers[event] = [] if @handlers[event].nil?
+      @handlers[event].push handler
     end
-
   end
 end

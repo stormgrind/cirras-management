@@ -18,43 +18,15 @@
 # Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 # 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
-require 'net/http'
-require 'uri'
-require 'socket'
-require 'timeout'
-require 'ping'
-require 'yaml'
-require 'rubygems'
+require 'cirras-management/api/2009-05-18/handler/helper/base-request-handler-helper'
+require 'cirras-management/api/2009-05-18/handler/put/management-address-request-handler'
 
-module JBossCloudManagement
-  class IPHelper
+module CirrASManagement
+  class DefaultRequestHandlerHelper < BaseRequestHandlerHelper
+    def initialize( to )
+      super( to )
 
-    def initialize
-      @timeout = 2
+      register_handler( :management_address_request, ManagementAddressRequestHandler.new( "/#{@prefix}/address/#{APPLIANCE_TYPE[:management]}", @to ) )
     end
-
-    def local_ip
-      address = `ip addr list eth0 | grep "inet " | cut -d' ' -f6 | cut -d/ -f1`.strip
-      return nil if address.length == 0
-      address
-    end
-
-    def is_port_open?(ip, port = 80)
-      begin
-        Timeout::timeout(@timeout) do
-          begin
-            s = TCPSocket.new(ip, port)
-            s.close
-            return true
-          rescue Errno::ECONNREFUSED, Errno::EHOSTUNREACH
-            return false
-          end
-        end
-      rescue Timeout::Error
-      end
-
-      return false
-    end
-
   end
 end

@@ -18,28 +18,43 @@
 # Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 # 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
-require 'jboss-cloud-management/api/2009-05-18/handler/base-request-handler'
+require 'net/http'
+require 'uri'
+require 'socket'
+require 'timeout'
+require 'ping'
+require 'yaml'
+require 'rubygems'
 
-module JBossCloudManagement
-  class AddressRequestHandler < BaseRequestHandler
-    def initialize( path, to )
-      super( path, to )
+module CirrASManagement
+  class IPHelper
+
+    def initialize
+      @timeout = 2
     end
 
-    def address_request
+    def local_ip
+      address = `ip addr list eth0 | grep "inet " | cut -d' ' -f6 | cut -d/ -f1`.strip
+      return nil if address.length == 0
+      address
     end
 
-    def define_handle
-      get @path do
-        notify( :address_request )
-
-        addresses = []
-        Manager.node_manager.nodes_by_type( params[:appliance] ).each do |node|
-          addresses.push( node.address )
+    def is_port_open?(ip, port = 80)
+      begin
+        Timeout::timeout(@timeout) do
+          begin
+            s = TCPSocket.new(ip, port)
+            s.close
+            return true
+          rescue Errno::ECONNREFUSED, Errno::EHOSTUNREACH
+            return false
+          end
         end
-        
-        Base64.encode64( addresses.to_yaml )
+      rescue Timeout::Error
       end
+
+      return false
     end
+
   end
 end

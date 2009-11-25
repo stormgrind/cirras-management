@@ -11,13 +11,13 @@ class ManagementAddressRequestHandlerTest < Test::Unit::TestCase
   def setup
     log = Logger.new(STDOUT)
 
-    config = JBossCloudManagement::Config.new( log )
-    config.appliance_name = JBossCloudManagement::APPLIANCE_TYPE[:backend]
+    config = CirrASManagement::Config.new( log )
+    config.appliance_name = CirrASManagement::APPLIANCE_TYPE[:backend]
 
-    to = JBossCloudManagement::HandlerTO.new( "latest", "2009-08-12", config , log )
-    @management_address_request_handler = JBossCloudManagement::ManagementAddressRequestHandler.new( '/path', to )
+    to = CirrASManagement::HandlerTO.new( "latest", "2009-08-12", config , log )
+    @management_address_request_handler = CirrASManagement::ManagementAddressRequestHandler.new( '/path', to )
 
-    @management_address_request_handler.client_helper = JBossCloudManagement::ClientHelperMock.new( config, log )
+    @management_address_request_handler.client_helper = CirrASManagement::ClientHelperMock.new( config, log )
     @management_address_request_handler.jboss_as5_conf_file = "src/jboss-as5.conf"
   end
 

@@ -18,19 +18,36 @@
 # Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 # 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
-module JBossCloudManagement
-  class HandlerTO
-    def initialize( prefix, api_version, config, log )
-      @prefix       = prefix
-      @api_version  = api_version
-      @config       = config
-      @log          = log
+require 'cirras-management/helper/ip-helper'
+require 'cirras-management/helper/log-helper'
+require 'restclient'
+
+module CirrASManagement
+  class ConfigHelper
+    def initialize( log )
+      @log = log
     end
 
-    attr_reader :prefix
-    attr_reader :api_version
-    attr_reader :log
-    attr_reader :config
-    attr_reader :log
+    def is_ec2?
+      @log.info "Discovering if we're on EC2..."
+
+      is_ec2 = false
+
+      begin
+        # trying to get local IP on EC2
+        RestClient.get 'http://169.254.169.254/latest/meta-data/local-ipv4'
+        is_ec2 = true
+      rescue
+      end
+
+      if is_ec2
+        @log.info "We're on EC2!"
+      else
+        @log.info "We're not on EC2!"
+      end
+
+      is_ec2
+    end
+
   end
 end

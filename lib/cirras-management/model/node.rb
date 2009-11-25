@@ -18,23 +18,14 @@
 # Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 # 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
-require 'logger'
-require 'singleton'
-
-module JBossCloudManagement
-  class LogHelper
-    include Singleton
-
-    def initialize
-      @log              = Logger.new('/var/log/jboss-cloud-management/default.log', 10, 1024000)
-      @log.level        = Logger::DEBUG      
-      @web_log          = Logger.new('/var/log/jboss-cloud-management/web.log', 10, 1024000)
-      @client_log_file  = '/var/log/jboss-cloud-management/client.log'
+module CirrASManagement
+  class Node
+    def initialize( name )
+      @name = name
     end
 
-    attr_reader :log
-    attr_reader :web_log
-    attr_reader :client_log_file
+    attr_accessor :address
+    attr_accessor :name
 
   end
 end

@@ -18,15 +18,37 @@
 # Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 # 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
-require 'jboss-cloud-management/api/2009-05-18/handler/helper/base-request-handler-helper'
-require 'jboss-cloud-management/api/2009-05-18/handler/put/management-address-request-handler'
+require 'cirras-management/node/base-node-manager'
 
-module JBossCloudManagement
-  class DefaultRequestHandlerHelper < BaseRequestHandlerHelper
-    def initialize( to )
-      super( to )
+module CirrASManagement
+  class DefaultNodeManager < BaseNodeManager
+    def initialize( config )
+      super( config )
 
-      register_handler( :management_address_request, ManagementAddressRequestHandler.new( "/#{@prefix}/address/#{APPLIANCE_TYPE[:management]}", @to ) )
+      @leases_file  = @config.leases_file
+    end
+
+    def node_addresses
+      addresses = []
+
+      # if this is not EC2
+      log_msg = "Package dhcpd isn't installed or DHCP server isn't running. Aborting."
+
+      unless File.exists?( @leases_file )
+        @log.fatal log_msg
+        raise log_msg
+      end
+
+      # get IP addresses from lease file
+      lease_ips = `grep -B 5 "binding state active" #{@leases_file} | grep lease | awk '{ print $2 }'`
+
+      # parsing file
+      lease_ips.each { |line| addresses.push line.strip }
+
+      # push our local IP too
+      addresses.push @ip_helper.local_ip
+
+      addresses.uniq
     end
   end
 end

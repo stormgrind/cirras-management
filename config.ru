@@ -3,10 +3,10 @@ require 'restclient'
 
 $: << 'lib'
 
-require 'jboss-cloud-management/manager'
-require 'jboss-cloud-management/helper/log-helper'
+require 'cirras-management/manager'
+require 'cirras-management/helper/log-helper'
 
-module JBossCloudManagement
+module CirrASManagement
     Manager.new
     use Rack::CommonLogger, LogHelper.instance.web_log
     RestClient.log = LogHelper.instance.client_log_file

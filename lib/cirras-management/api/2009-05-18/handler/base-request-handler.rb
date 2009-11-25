@@ -19,9 +19,9 @@
 # 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
 require 'base64'
-require 'jboss-cloud-management/event/event-manager'
+require 'cirras-management/event/event-manager'
 
-module JBossCloudManagement
+module CirrASManagement
   class BaseRequestHandler
     def initialize( path, to )
       @path         = path

@@ -18,15 +18,23 @@
 # Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 # 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
-require 'jboss-cloud-management/api/2009-05-18/handler/helper/base-request-handler-helper'
-require 'jboss-cloud-management/api/2009-05-18/handler/get/address-request-handler'
+require 'logger'
+require 'singleton'
 
-module JBossCloudManagement
-  class ManagementApplianceRequestHandlerHelper < BaseRequestHandlerHelper
-    def initialize( to )
-      super( to )
+module CirrASManagement
+  class LogHelper
+    include Singleton
 
-      register_handler( :address_request, AddressRequestHandler.new( "/#{@prefix}/address/:appliance", @to ) )
+    def initialize
+      @log              = Logger.new('/var/log/cirras-management/default.log', 10, 1024000)
+      @log.level        = Logger::DEBUG      
+      @web_log          = Logger.new('/var/log/cirras-management/web.log', 10, 1024000)
+      @client_log_file  = '/var/log/cirras-management/client.log'
     end
+
+    attr_reader :log
+    attr_reader :web_log
+    attr_reader :client_log_file
+
   end
 end

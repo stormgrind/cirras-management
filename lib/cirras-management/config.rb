@@ -18,17 +18,17 @@
 # Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 # 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
-require 'jboss-cloud-management/helper/config-helper'
-require 'jboss-cloud-management/model/node'
+require 'cirras-management/helper/config-helper'
+require 'cirras-management/model/node'
 
-module JBossCloudManagement
+module CirrASManagement
 
   class Config
 
     def initialize( log )
       @log = log
 
-      config = YAML.load_file( "/etc/jboss-cloud" )
+      config = YAML.load_file( "/etc/boxgrinder" )
       raise "Invalid config file!" unless config
 
       @observers        = []

@@ -24,11 +24,11 @@ require 'timeout'
 require 'yaml'
 require 'base64'
 require 'resolv'
-require 'jboss-cloud-management/helper/ip-helper'
-require 'jboss-cloud-management/helper/client-helper'
-require 'jboss-cloud-management/model/node'
+require 'cirras-management/helper/ip-helper'
+require 'cirras-management/helper/client-helper'
+require 'cirras-management/model/node'
 
-module JBossCloudManagement
+module CirrASManagement
   class BaseNodeManager
     def initialize( config )
       @log        = LogHelper.instance.log

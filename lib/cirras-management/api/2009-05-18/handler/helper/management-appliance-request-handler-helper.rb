@@ -18,14 +18,15 @@
 # Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 # 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
-module JBossCloudManagement
-  class Node
-    def initialize( name )
-      @name = name
+require 'cirras-management/api/2009-05-18/handler/helper/base-request-handler-helper'
+require 'cirras-management/api/2009-05-18/handler/get/address-request-handler'
+
+module CirrASManagement
+  class ManagementApplianceRequestHandlerHelper < BaseRequestHandlerHelper
+    def initialize( to )
+      super( to )
+
+      register_handler( :address_request, AddressRequestHandler.new( "/#{@prefix}/address/:appliance", @to ) )
     end
-
-    attr_accessor :address
-    attr_accessor :name
-
   end
 end
