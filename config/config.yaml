@@ -1,9 +1,9 @@
 ---
   environment: production
-  chdir:  /home/oddthesis/git/cirras-management #/usr/share/cirras-management
+  chdir: /usr/share/cirras-management
   address: 0.0.0.0
-  user: oddthesis # thin
-  group: oddthesis # thin
+  user: thin
+  group: thin
   port: 4545
   pid: /var/lock/cirras-management.pid
   rackup: config.ru
@@ -11,4 +11,4 @@
   max_conns: 100
   timeout: 30
   max_persistent_conns: 100
-  daemonize: false # true
+  daemonize: true
