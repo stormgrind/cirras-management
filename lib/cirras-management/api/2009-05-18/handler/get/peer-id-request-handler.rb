@@ -18,17 +18,29 @@
 # Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 # 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
-require 'cirras-management/api/2009-05-18/handler/helper/base-request-handler-helper'
-require 'cirras-management/api/2009-05-18/handler/get/address-request-handler'
-require 'cirras-management/api/2009-05-18/handler/get/peer-id-request-handler'
+require 'cirras-management/model/node'
+require 'cirras-management/event/event-manager'
+require 'cirras-management/api/2009-05-18/handler/base-request-handler'
 
 module CirrASManagement
-  class ManagementApplianceRequestHandlerHelper < BaseRequestHandlerHelper
-    def initialize( to )
-      super( to )
+  class PeerIDRequestHandler < BaseRequestHandler
+    def initialize( path, to )
+      super( path, to )
 
-      register_handler( :address_request, AddressRequestHandler.new( "/#{@prefix}/address/:appliance", @to ) )
-      register_handler( :peer_id_request, PeerIDRequestHandler.new( "/#{@prefix}/peer-id", @to ) )
+      @@id = 0
+    end
+
+    def peer_id_request
+    end
+
+    def define_handle
+      get @path do
+        notify( :peer_id_request )
+
+        @@id += 1
+
+        Base64.encode64( @@id.to_yaml )
+      end
     end
   end
 end
