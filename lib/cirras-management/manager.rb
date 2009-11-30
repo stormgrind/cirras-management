@@ -33,10 +33,10 @@ require 'sinatra'
 module CirrASManagement
 
   APPLIANCE_TYPE = {
-          :backend        => "back-end-appliance",
-          :frontend       => "front-end-appliance",
-          :management     => "management-appliance",
-          :postgis        => "postgis-appliance"
+          :backend        => "back-end",
+          :frontend       => "front-end",
+          :management     => "management",
+          :postgis        => "postgis"
   }
 
   APIS = [ "2009-05-18" ]
