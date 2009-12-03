@@ -1,11 +1,11 @@
 #/bin/sh
 
 address=`ip addr list eth0 | grep "inet " | cut -d' ' -f6 | cut -d/ -f1`
-appliance_name=`awk '{ print $2 }' /etc/cirras`
+appliance_name=`awk '{ print $2 }' /etc/boxgrinder`
 network_script="/usr/share/cirras-management/src/network-setup.sh"
 
 if [ "$address" == "" ]; then
-    if [ "$appliance_name" == "management-appliance" ]; then
+    if [ "$appliance_name" == "management" ]; then
         # prepare network card
         echo -e "DEVICE=eth0\nBOOTPROTO=none\nONBOOT=yes\nNETWORK=192.168.192.0\nNETMASK=255.255.255.0\nIPADDR=192.168.192.1\nUSERCTL=no" > /etc/sysconfig/network-scripts/ifcfg-eth0
 
