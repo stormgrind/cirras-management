@@ -27,6 +27,7 @@ module CirrASManagement
     def initialize( path, to )
       super( path, to )
 
+      @@ids = {}
       @@id = 0
     end
 
@@ -37,9 +38,13 @@ module CirrASManagement
       get @path do
         notify( :peer_id_request )
 
-        @@id += 1
+        ip = request.env['HTTP_X_FORWARDED_FOR'].nil? ? request.env['REMOTE_ADDR'].to_s : request.env['HTTP_X_FORWARDED_FOR'].to_s
 
-        Base64.encode64( @@id.to_yaml )
+        unless @@ids.has_key?( ip )
+          @@ids[ip] = @@id += 1
+        end
+       
+        Base64.encode64( @@ids[ip].to_yaml )
       end
     end
   end
