@@ -40,13 +40,13 @@ module CirrASManagement
       if @management_address != address
         @management_address = address
 
-        if File.exists?("/etc/init.d/jopr-agent")
+        `sudo sh -c "echo 'RHQ_SERVER_IP=#{address}' >> /etc/sysconfig/rhq-agent"`  if File.exists?("/etc/sysconfig/rhq-agent")
+        `sudo sh -c "echo 'RHQ_SERVER_IP=#{address}' >> /etc/sysconfig/rhq-cli"`    if File.exists?("/etc/sysconfig/rhq-cli")
 
-          `sudo sh -c "echo 'JOPR_SERVER_IP=#{address}' > /etc/sysconfig/jopr-agent"`
-
+        if File.exists?("/etc/init.d/rhq-agent")
           Thread.new do
-            stop_jopr_agent
-            start_jopr_agent
+            stop_rhq_agent
+            start_rhq_agent
           end
         end
       end
@@ -161,25 +161,25 @@ module CirrASManagement
 
     end
 
-    def start_jopr_agent
-      @log.info "Starting JOPR agent..."
-      `sudo /sbin/service jopr-agent start`
+    def start_rhq_agent
+      @log.info "Starting RHQ agent..."
+      `sudo /sbin/service rhq-agent start`
 
       unless $?.to_i == 0
-        @log.error "JOPR agent starting failed. Check system logs."
+        @log.error "RHQ agent starting failed. Check system logs."
       else
-        @log.info "JOPR agent successfully started."
+        @log.info "RHQ agent successfully started."
       end
     end
 
-    def stop_jopr_agent
-      @log.info "Stopping JOPR agent..."
-      `sudo /sbin/service jopr-agent stop`
+    def stop_rhq_agent
+      @log.info "Stopping RHQ agent..."
+      `sudo /sbin/service rhq-agent stop`
 
       unless $?.to_i == 0
-        @log.error "JOPR agent stopping failed or JOPR agent was not running."
+        @log.error "RHQ agent stopping failed or RHQ agent was not running."
       else
-        @log.info "JOPR agent successfully stopped."
+        @log.info "RHQ agent successfully stopped."
       end
     end
 
