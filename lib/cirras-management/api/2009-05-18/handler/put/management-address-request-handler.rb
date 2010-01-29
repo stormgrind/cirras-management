@@ -41,7 +41,6 @@ module CirrASManagement
         @management_address = address
 
         `sudo sh -c "echo 'RHQ_SERVER_IP=#{address}' >> /etc/sysconfig/rhq-agent"`  if File.exists?("/etc/sysconfig/rhq-agent")
-        `sudo sh -c "echo 'RHQ_SERVER_IP=#{address}' >> /etc/sysconfig/rhq-cli"`    if File.exists?("/etc/sysconfig/rhq-cli")
 
         if File.exists?("/etc/init.d/rhq-agent")
           Thread.new do
