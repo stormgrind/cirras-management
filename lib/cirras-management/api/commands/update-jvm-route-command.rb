@@ -18,50 +18,43 @@
 # Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 # 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
-require 'yaml'
-require 'base64'
-require 'logger'
-require 'restclient'
+require 'cirras-management/helper/log-helper'
+require 'cirras-management/helper/exec-helper'
+require 'cirras-management/api/commands/base-jboss-as-command'
 
 module CirrASManagement
-  class ClientHelper
+  class UpdateJVMRouteCommand < BaseJBossASCommand
+
     def initialize( options = {} )
-      @timeout    = options[:timeout]   || 2
-      @log        = options[:log]       || LOG
+      super( { :log => options[:log] } )
     end
 
-    def get( url )
-      @log.debug "GET: #{url}"
-
-      t_current = Thread.current
-      begin
-        t_timer = Thread.new { sleep @timeout; t_current.raise "Timeout exceeded while getting information from url '#{url}'" }
-
-        data = YAML.load( Base64.decode64( RestClient.get( url ).to_s ))
-
-        return nil if data == false
-        return data
-      rescue StandardError => err
-        @log.warn "An error occured: #{err}"
-      ensure
-        t_timer.kill
+    def execute
+      unless calculate_jvm_route
+        @log.error "Couldn't calculate JVMRoute, check logs for errors."
+        return
       end
-      nil
+
+      current_jvm_route = twiddle_execute( "get jboss.web:type=Engine jvmRoute" ).scan(/^jvmRoute=(.*)$/).to_s
+
+      @log.info "Current JVMRoute value is '#{current_jvm_route}'"
+
+      if (current_jvm_route.eql?(@jvm_route))
+        @log.info "Requested value is already set, no need to update, skipping."
+      else
+        @log.info "Updating to '#{@jvm_route}'..."
+        twiddle_execute( "set jboss.web:type=Engine jvmRoute #{@jvm_route}" )
+        @log.info "JVMRoute updated."
+      end
     end
 
-    def put( url, data )
-      @log.debug "PUT: #{url}, #{data}"
+    def calculate_jvm_route
+      ip_address  = @ip_helper.local_ip
+      return false if ip_address.nil?
 
-      t_current = Thread.current
-      begin
-        t_timer = Thread.new { sleep @timeout; t_current.raise "Timeout exceeded while putting information to url '#{url}'" }
+      @jvm_route = "#{Socket.gethostname}-#{ip_address}"
 
-        RestClient.put( url, data )
-      rescue StandardError => err
-        @log.warn "An error occured: #{err}"
-      ensure
-        t_timer.kill
-      end
+      true
     end
   end
 end

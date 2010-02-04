@@ -18,52 +18,37 @@
 # Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 # 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
-require 'net/http'
-require 'uri'
-require 'socket'
-require 'timeout'
-require 'ping'
-require 'yaml'
-require 'rubygems'
-
 module CirrASManagement
-  class IPHelper
+  class ReconfigureRHQAgentCommand < BaseJBossASCommand
 
-    def initialize( options = {} )
-      @log = options[:log] || Logger.new(STDOUT)
-      @timeout = 1
+    def initialize( management_appliance_address, options = {} )
+      super( { :log => options[:log] } )
+
+      @management_appliance_address = management_appliance_address
     end
 
-    def local_ip
-      @log.debug "Trying to get current IP address..."
-      address = `ip addr list eth0 | grep "inet " | cut -d' ' -f6 | cut -d/ -f1`.strip
-
-      if address.length == 0
-        @log.warn "Cannot get IP address."
-        return nil
+    def execute
+      if @management_appliance_address.nil?
+        @log.warn "No management appliance provided, skipping reconfiguring RHQ Agent."
+        return
       end
 
-      @log.debug "Got IP address: #{address}."
+      # we're assuming that on back-end node rhq-agent package is installed
+      @exec_helper.execute "sudo sh -c \"echo 'RHQ_SERVER_IP=#{@management_appliance_address}' >> /etc/sysconfig/rhq-agent\""
 
-      address
+      # TODO: remove this, what with reconfiguring?
+      stop_rhq_agent
+      start_rhq_agent
     end
 
-    def is_port_open?(ip, port = 80)
-      begin
-        Timeout::timeout(@timeout) do
-          begin
-            s = TCPSocket.new(ip, port)
-            s.close
-            return true
-          rescue Errno::ECONNREFUSED, Errno::EHOSTUNREACH
-            return false
-          end
-        end
-      rescue Timeout::Error
-      end
-
-      return false
+    def start_rhq_agent
+      @log.info "Starting RHQ agent..."
+      @exec_helper.execute "sudo /sbin/service rhq-agent start"
     end
 
+    def stop_rhq_agent
+      @log.info "Stopping RHQ agent..."
+      @exec_helper.execute "sudo /sbin/service rhq-agent stop"
+    end
   end
 end

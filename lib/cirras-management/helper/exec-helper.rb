@@ -18,49 +18,26 @@
 # Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 # 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
-require 'yaml'
-require 'base64'
-require 'logger'
-require 'restclient'
-
 module CirrASManagement
-  class ClientHelper
+  class ExecHelper
     def initialize( options = {} )
-      @timeout    = options[:timeout]   || 2
-      @log        = options[:log]       || LOG
+      @log = options[:log] || Logger.new(STDOUT)
     end
 
-    def get( url )
-      @log.debug "GET: #{url}"
+    def execute( command, file = nil )
+      @log.debug "Executing command: '#{command}'"
 
-      t_current = Thread.current
-      begin
-        t_timer = Thread.new { sleep @timeout; t_current.raise "Timeout exceeded while getting information from url '#{url}'" }
+      out = `#{command} 2>&1`
 
-        data = YAML.load( Base64.decode64( RestClient.get( url ).to_s ))
+      formatted_output = "Command return:\r\n+++++\r\n#{out}+++++"
 
-        return nil if data == false
-        return data
-      rescue StandardError => err
-        @log.warn "An error occured: #{err}"
-      ensure
-        t_timer.kill
-      end
-      nil
-    end
-
-    def put( url, data )
-      @log.debug "PUT: #{url}, #{data}"
-
-      t_current = Thread.current
-      begin
-        t_timer = Thread.new { sleep @timeout; t_current.raise "Timeout exceeded while putting information to url '#{url}'" }
-
-        RestClient.put( url, data )
-      rescue StandardError => err
-        @log.warn "An error occured: #{err}"
-      ensure
-        t_timer.kill
+      if $?.to_i != 0
+        @log.error formatted_output
+        raise "An error occurred executing command: '#{command}'"
+      else
+        @log.debug formatted_output unless out.strip.length == 0
+        @log.debug "Command '#{command}' executed successfully"
+        return out
       end
     end
   end

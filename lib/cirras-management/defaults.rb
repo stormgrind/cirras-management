@@ -18,52 +18,18 @@
 # Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 # 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
-require 'net/http'
-require 'uri'
-require 'socket'
-require 'timeout'
-require 'ping'
-require 'yaml'
-require 'rubygems'
 
 module CirrASManagement
-  class IPHelper
+  APPLIANCE_TYPE = {
+          :backend        => "back-end",
+          :frontend       => "front-end",
+          :management     => "management",
+          :postgis        => "postgis"
+  }
 
-    def initialize( options = {} )
-      @log = options[:log] || Logger.new(STDOUT)
-      @timeout = 1
-    end
+  APIS = [ "2009-05-18" ]
 
-    def local_ip
-      @log.debug "Trying to get current IP address..."
-      address = `ip addr list eth0 | grep "inet " | cut -d' ' -f6 | cut -d/ -f1`.strip
-
-      if address.length == 0
-        @log.warn "Cannot get IP address."
-        return nil
-      end
-
-      @log.debug "Got IP address: #{address}."
-
-      address
-    end
-
-    def is_port_open?(ip, port = 80)
-      begin
-        Timeout::timeout(@timeout) do
-          begin
-            s = TCPSocket.new(ip, port)
-            s.close
-            return true
-          rescue Errno::ECONNREFUSED, Errno::EHOSTUNREACH
-            return false
-          end
-        end
-      rescue Timeout::Error
-      end
-
-      return false
-    end
-
-  end
+  LOG                     = LogHelper.instance.log
+  DEFAULT_FRONT_END_PORT  = 80
+  JBOSS_HOME              = "/opt/jboss-as6"
 end

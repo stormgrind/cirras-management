@@ -27,6 +27,7 @@ require 'cirras-management/node/aws-node-manager'
 require 'cirras-management/node/default-node-manager'
 require 'cirras-management/event/event-manager'
 require 'cirras-management/api/2009-05-18/handler/handler-to'
+require 'cirras-management/defaults'
 
 require 'sinatra'
 
@@ -41,10 +42,13 @@ module CirrASManagement
 
   APIS = [ "2009-05-18" ]
 
+  LOG = LogHelper.instance.log
+  DEFAULT_FRONT_END_PORT  = 80
+
   class Manager
     def initialize
 
-      @log = LogHelper.instance.log
+      @log = LOG
 
       @config           = Config.new( @log )
       @@config          = @config
