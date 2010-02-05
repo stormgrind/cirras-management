@@ -54,7 +54,7 @@ module CirrASManagement
     end
 
     it "should load configuration" do
-      prepare_cmd( "appliance", "src/default-agent-configuration.xml" )
+      prepare_cmd( "appliance", "#{File.dirname(__FILE__)}/../src/default-agent-configuration.xml" )
 
       doc = Nokogiri::XML::Document.new
       @cmd.should_receive(:get_entries_by_key).with("rhq.agent.configuration-schema-version").once.and_return(Nokogiri::XML::NodeSet.new( doc, [ Nokogiri::XML::Node.new( "entry", doc ) ]))
