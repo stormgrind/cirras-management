@@ -37,7 +37,7 @@ module CirrASManagement
       @config     = config
 
       @ip_helper      = IPHelper.new
-      @client_helper  = ClientHelper.new( @config, @log )
+      @client_helper  = ClientHelper.new( { :log => @log } )
     end
 
     attr_reader :nodes
