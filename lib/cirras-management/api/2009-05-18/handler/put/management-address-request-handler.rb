@@ -22,6 +22,8 @@ require 'cirras-management/api/2009-05-18/handler/base-request-handler'
 require 'cirras-management/helper/log-helper'
 require 'cirras-management/helper/client-helper'
 require 'cirras-management/api/commands/update-proxy-list-command'
+require 'cirras-management/api/commands/update-rhq-agent-command'
+require 'cirras-management/api/commands/update-peer-id-command'
 
 module CirrASManagement
   class ManagementAddressRequestHandler < BaseRequestHandler
@@ -40,16 +42,16 @@ module CirrASManagement
 
               UpdateProxyListCommand.new( management_appliance_address ).execute
               UpdatePeerIdCommand.new( management_appliance_address ).execute
+              UpdateJVMRouteCommand.new.execute
+
             else
               if @management_address != management_appliance_address
                 @management_address = management_appliance_address
 
-                RHQAgentUpdateCommand.new( "agent-configuration.xml", {
+                RHQAgentUpdateCommand.new({
                         :appliance_name => @config.appliance_name,
                         :management_appliance_address => @management_address
                 }).execute
-
-                ReconfigureRHQAgentCommand.new( @management_address ).execute
               end
           end
         rescue => e

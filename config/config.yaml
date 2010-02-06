@@ -2,8 +2,8 @@
   environment: production
   chdir: /usr/share/cirras-management
   address: 0.0.0.0
-  user: thin
-  group: thin
+  user: root
+  group: root
   port: 4545
   pid: /var/lock/cirras-management.pid
   rackup: config.ru
