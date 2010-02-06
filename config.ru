@@ -8,7 +8,7 @@ require 'cirras-management/helper/log-helper'
 
 module CirrASManagement
     Manager.new
-    use Rack::CommonLogger, LogHelper.instance.web_log
+    use Rack::CommonLogger
     RestClient.log = LogHelper.instance.client_log_file
 end
 
