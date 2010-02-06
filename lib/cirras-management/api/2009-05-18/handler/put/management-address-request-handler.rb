@@ -44,6 +44,11 @@ module CirrASManagement
               if @management_address != management_appliance_address
                 @management_address = management_appliance_address
 
+                RHQAgentUpdateCommand.new( "agent-configuration.xml", {
+                        :appliance_name => @config.appliance_name,
+                        :management_appliance_address => @management_address
+                }).execute
+
                 ReconfigureRHQAgentCommand.new( @management_address ).execute
               end
           end

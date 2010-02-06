@@ -25,13 +25,15 @@ require 'nokogiri'
 
 module CirrASManagement
   class RHQAgentUpdateCommand
-    def initialize( appliance_name, agent_configuration_file, options = {} )
+    def initialize( agent_configuration_file, agent_options = {}, options = {} )
       @log            = options[:log]           || LOG
       @exec_helper    = options[:exec_helper]   || ExecHelper.new( { :log => @log } )
       @ip_helper      = options[:ip_helper]     || IPHelper.new( { :log => @log } )
 
-      @appliance_name           = appliance_name
-      @agent_configuration_file = agent_configuration_file
+      @appliance_name                   = agent_options[:appliance_name]
+      @management_appliance_address     = agent_options[:management_appliance_address]
+
+      @agent_configuration_file         = agent_configuration_file
     end
 
     def execute
@@ -41,8 +43,10 @@ module CirrASManagement
       end
 
       update_entry( 'rhq.agent.name', "#{@appliance_name}#{@appliance_name.nil? ? "" : "-"}#{Socket.gethostname}" )
+      update_entry( 'rhq.agent.server.bind-address', @management_appliance_address )
 
       update_file
+      restart_agent
     end
 
     def update_file
@@ -51,7 +55,8 @@ module CirrASManagement
 
     def load_configuration
       if @agent_configuration_file.nil?
-        @log.error "No agent configuration file specified."
+        @log.error "
+        No agent configuration file specified."
         return false
       end
 
@@ -89,6 +94,20 @@ module CirrASManagement
 
     def get_entries_by_key( key )
       @agent_configuration.xpath("//entry[@key='#{key}']")
+    end
+
+    def restart_agent
+      @log.info "Restarting RHQ Agent..."
+
+      begin
+        @exec_helper.execute "sudo /sbin/service rhq-agent restart"
+        @log.info "RHQ Agent successfully restarted."
+        return true
+      rescue => e
+        @log.error "Couldn't restart RHQ agent."
+        @log.error e
+        return false
+      end
     end
   end
 end
