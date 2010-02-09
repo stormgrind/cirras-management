@@ -22,33 +22,17 @@ require 'cirras-management/helper/config-helper'
 require 'cirras-management/model/node'
 
 module CirrASManagement
-
   class Config
+    def initialize( fields )
 
-    def initialize( log )
-      @log = log
-
-      config = YAML.load_file( "/etc/boxgrinder" )
-      raise "Invalid config file!" unless config
+      fields.each_pair do | key, value |
+        instance_variable_set("@#{key}", value)
+      end
 
       @observers        = []
-
       @port             = 4545          # port used to listen on
       @timeout          = 2             # time to wait for response from other node (in seconds)
       @sleep            = 20            # time to wait before next node querying
-
-      @appliance_name   = config['appliance_name']
-      @node             = Node.new( @appliance_name )
-      @config_helper    = ConfigHelper.new( @log )
-      @running_on_ec2   = @config_helper.is_ec2?
-
-      @rack_config      = YAML.load_file( "config/config.yaml" )
-      @leases_file      = "/var/lib/dhcpd/dhcpd.leases"
-
-      configure :test, :development do
-        @leases_file    = "test/leases"
-      end
-
     end
 
     attr_reader :rack_config

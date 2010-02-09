@@ -18,14 +18,37 @@
 # Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 # 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
-require 'cirras-management/helper/ip-helper'
-require 'cirras-management/helper/log-helper'
 require 'restclient'
 
 module CirrASManagement
   class ConfigHelper
-    def initialize( log )
-      @log = log
+    def initialize( options = {} )
+      @log                      = options[:log]                     || Logger.new(STDOUT)
+      @boxgrinder_config_file   = options[:boxgrinder_config_file]  || BOXGRINDER_CONFIG_FILE
+      @rack_config_file         = options[:rack_config_file]        || RACK_CONFIG_FILE
+      @leases_file              = options[:leases_file]             || LEASES_FILE
+    end
+
+    def config
+      boxgrinder_config   = load_yaml( @boxgrinder_config_file )
+      rack_config         = load_yaml( @rack_config_file )
+
+      appliance_name      = boxgrinder_config['appliance_name']
+
+      @config = Config.new(
+              :running_on_ec2   => is_ec2?,
+              :leases_file      => @leases_file,
+              :rack_config      => rack_config,
+              :node             => Node.new( appliance_name ),
+              :appliance_name   => appliance_name
+      )
+    end
+
+    def load_yaml( file )
+      content = YAML.load_file( file )
+      raise "Invalid YAML file: #{file}" unless content
+
+      content
     end
 
     def is_ec2?

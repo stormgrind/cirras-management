@@ -22,6 +22,7 @@ require 'cirras-management/api/2009-05-18/handler/base-request-handler'
 require 'cirras-management/helper/log-helper'
 require 'cirras-management/helper/client-helper'
 require 'cirras-management/api/commands/update-proxy-list-command'
+require 'cirras-management/api/commands/update-jvm-route-command'
 require 'cirras-management/api/commands/update-rhq-agent-command'
 require 'cirras-management/api/commands/update-peer-id-command'
 
@@ -34,30 +35,28 @@ module CirrASManagement
     def management_address_request( management_appliance_address )
       @log.info "Got new management appliance address: #{management_appliance_address}"
 
-      Thread.new do
-        begin
-          case @config.appliance_name
-            when APPLIANCE_TYPE[:backend]
-              # TODO: this should be moved from here and executed periodically we should only update here management appliance address.
+      begin
+        case @config.appliance_name
+          when APPLIANCE_TYPE[:backend]
+            # TODO: this should be moved from here and executed periodically we should only update here management appliance address.
 
-              UpdateProxyListCommand.new( management_appliance_address ).execute
-              UpdatePeerIdCommand.new( management_appliance_address ).execute
-              UpdateJVMRouteCommand.new.execute
+            UpdateProxyListCommand.new( management_appliance_address ).execute
+            UpdatePeerIdCommand.new( management_appliance_address ).execute
+            UpdateJVMRouteCommand.new.execute
 
-            else
-              if @management_address != management_appliance_address
-                @management_address = management_appliance_address
+          else
+            if @management_address != management_appliance_address
+              @management_address = management_appliance_address
 
-                RHQAgentUpdateCommand.new({
-                        :appliance_name => @config.appliance_name,
-                        :management_appliance_address => @management_address
-                }).execute
-              end
-          end
-        rescue => e
-          @log.error "Something bad happened, but it shouldn't..."
-          @log.error e
+              RHQAgentUpdateCommand.new({
+                      :appliance_name => @config.appliance_name,
+                      :management_appliance_address => @management_address
+              }).execute
+            end
         end
+      rescue => e
+        @log.error "Something bad happened, but it shouldn't..."
+        @log.error e
       end
     end
 
@@ -65,7 +64,7 @@ module CirrASManagement
       put @path do
         pass if params[:address].nil?
 
-        notify( :management_address_request, params[:address].strip )
+        notify_threaded( :management_address_request, params[:address].strip )
       end
     end
   end

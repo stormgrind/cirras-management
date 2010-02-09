@@ -36,6 +36,7 @@ module CirrASManagement
     attr_reader :handlers
 
     def register_handler( event, handler )
+      handler.define_handle
       @handlers[event] = [] if @handlers[event].nil?
       @handlers[event].push handler
     end

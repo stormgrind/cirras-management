@@ -15,7 +15,7 @@ module CirrASManagement
     end
 
     it "should not break if there is nil injected as management address" do
-      UpdateProxyListCommand.new( nil ).execute
+      UpdateProxyListCommand.new( nil, { :log => Logger.new('/dev/null') } ).execute
     end
 
     it "should add one proxy" do

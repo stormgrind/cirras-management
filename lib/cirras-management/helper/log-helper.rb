@@ -20,16 +20,17 @@
 
 require 'logger'
 require 'singleton'
+require 'cirras-management/defaults'
 
 module CirrASManagement
   class LogHelper
     include Singleton
 
     def initialize
-      @log              = Logger.new('/var/log/cirras-management/default.log', 10, 1024000)
-      @log.level        = Logger::DEBUG      
-      @web_log          = Logger.new('/var/log/cirras-management/web.log', 10, 1024000)
-      @client_log_file  = '/var/log/cirras-management/client.log'
+      @log              = Logger.new(LOG_DEFAULT_FILE, 10, 1024000)
+      @log.level        = Logger::DEBUG
+      @web_log          = Logger.new(LOG_WEB_FILE, 10, 1024000)
+      @client_log_file  = LOG_CLIENT_FILE
     end
 
     attr_reader :log

@@ -17,7 +17,7 @@ module CirrASManagement
     end
 
     it "should not break if there is nil injected as management address" do
-      UpdatePeerIdCommand.new( nil ).execute
+      UpdatePeerIdCommand.new( nil, { :log => Logger.new('/dev/null') } ).execute
     end
 
     it "should not break if completely invalid PeerID is received" do

@@ -46,19 +46,31 @@ module CirrASManagement
       @log.debug "Registered #{handlers.size} handler helpers for API version '#{api_version}' and prefix '#{prefix}'"
     end
 
-    def notify( prefix, event, *args )
+    def notify( threaded, prefix, event, *args )
       return if @event_handlers[prefix].nil?
 
       unless @event_handlers[prefix][event].nil?
-        @log.debug "Handling event #{event} for prefix #{prefix}..."
-        @event_handlers[prefix][event].each do |handler|
-          @log.debug "Notyfing handler #{handler.class}"
-          handler.send event, *args
+        if threaded
+          Thread.new do
+            notify_internal( prefix, event, *args )
+          end
+        else
+          notify_internal( prefix, event, *args )
         end
-        @log.debug "Event #{event} was successfuly handled"
       else
         @log.debug "No handlers for event #{event}"
       end
+    end
+
+    protected
+
+    def notify_internal( prefix, event, *args )
+      @log.debug "Handling event #{event} for prefix #{prefix}..."
+      @event_handlers[prefix][event].each do |handler|
+        @log.debug "Notifying handler #{handler.class}"
+        handler.send event, *args
+      end
+      @log.debug "Event #{event} was successfully handled"
     end
   end
 end

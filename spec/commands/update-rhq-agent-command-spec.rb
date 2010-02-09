@@ -57,7 +57,7 @@ module CirrASManagement
     it "should load configuration" do
       prepare_cmd
 
-      @cmd.instance_variable_set(:@agent_system_properties_file, "#{File.dirname(__FILE__)}/../src/etc/rhq-agent")
+      @cmd.instance_variable_set(:@rhq_agent_sysconf_file, "#{File.dirname(__FILE__)}/../src/etc/rhq-agent")
       @cmd.load_configuration
 
       @cmd.instance_variable_get(:@agent_configuration_file).should eql("/opt/rhq-agent-3.0.0.B02/conf/agent-configuration.xml")

@@ -20,37 +20,24 @@
 
 require 'yaml'
 
-require 'cirras-management/config'
+require 'cirras-management/model/config'
 require 'cirras-management/helper/ip-helper'
 require 'cirras-management/helper/log-helper'
 require 'cirras-management/node/aws-node-manager'
 require 'cirras-management/node/default-node-manager'
 require 'cirras-management/event/event-manager'
-require 'cirras-management/api/2009-05-18/handler/handler-to'
+require 'cirras-management/model/handler-to'
 require 'cirras-management/defaults'
 
 require 'sinatra'
 
 module CirrASManagement
-
-  APPLIANCE_TYPE = {
-          :backend        => "back-end",
-          :frontend       => "front-end",
-          :management     => "management",
-          :postgis        => "postgis"
-  }
-
-  APIS = [ "2009-05-18" ]
-
-  LOG = LogHelper.instance.log
-  DEFAULT_FRONT_END_PORT  = 80
-
   class Manager
     def initialize
 
-      @log = LOG
+      @log = LogHelper.instance.log
 
-      @config           = Config.new( @log )
+      @config           = ConfigHelper.new( :log => @log ).config
       @@config          = @config
 
       @log.info "Setting up management environment for #{@config.appliance_name}"
@@ -72,6 +59,7 @@ module CirrASManagement
       # sinatra parameters
       enable  :raise_errors
       disable :logging
+      disable :lock
 
       helpers do
         def prefix
@@ -79,9 +67,12 @@ module CirrASManagement
         end
 
         def notify( event, *args )
-          EventManager.instance.notify( prefix, event, *args )
+          EventManager.instance.notify( false, prefix, event, *args )
         end
 
+        def notify_threaded( event, *args )
+          EventManager.instance.notify( true, prefix, event, *args )
+        end
       end
 
       for api in APIS

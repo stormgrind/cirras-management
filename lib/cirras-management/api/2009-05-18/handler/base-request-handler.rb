@@ -28,13 +28,7 @@ module CirrASManagement
       @prefix       = to.prefix
       @config       = to.config
       @api_version  = to.api_version
-      @log          = to.log
-
-      define_handle
-    end
-
-    def define_handle
-      raise "NotImplemented"
+      @log          = to.log    
     end
   end
 end

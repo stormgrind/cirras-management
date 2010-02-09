@@ -30,7 +30,14 @@ module CirrASManagement
 
   APIS = [ "2009-05-18" ]
 
-  LOG                     = LogHelper.instance.log
   DEFAULT_FRONT_END_PORT  = 80
   JBOSS_HOME              = "/opt/jboss-as6"
+  BOXGRINDER_CONFIG_FILE  = "/etc/boxgrinder"
+  RACK_CONFIG_FILE        = "config/config.yaml"
+  LEASES_FILE             = "/var/lib/dhcpd/dhcpd.leases"
+  RHQ_AGENT_SYSCONF_FILE  = "/etc/sysconfig/rhq-agent"
+
+  LOG_DEFAULT_FILE        = "/var/log/cirras-management/default.log"
+  LOG_WEB_FILE            = "/var/log/cirras-management/web.log"
+  LOG_CLIENT_FILE         = "/var/log/cirras-management/client.log"
 end

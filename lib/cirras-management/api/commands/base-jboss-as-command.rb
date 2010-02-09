@@ -26,7 +26,7 @@ require 'cirras-management/defaults'
 module CirrASManagement
   class BaseJBossASCommand
     def initialize( options = {} )
-      @log            = options[:log]           || LOG
+      @log            = options[:log]           || Logger.new(STDOUT)
       @exec_helper    = options[:exec_helper]   || ExecHelper.new( { :log => @log } )
       @client_helper  = options[:client_helper] || ClientHelper.new( { :log => @log } )
       @ip_helper      = options[:ip_helper]     || IPHelper.new( { :log => @log } )

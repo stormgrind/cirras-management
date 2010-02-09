@@ -25,14 +25,14 @@ require 'nokogiri'
 
 module CirrASManagement
   class RHQAgentUpdateCommand
-    def initialize( agent_options = {}, options = {} )
-      @log            = options[:log]           || LOG
-      @exec_helper    = options[:exec_helper]   || ExecHelper.new( { :log => @log } )
-      @ip_helper      = options[:ip_helper]     || IPHelper.new( { :log => @log } )
+    def initialize( agent_options, options = {} )
+      @log                        = options[:log]                       || Logger.new(STDOUT)
+      @rhq_agent_sysconf_file     = options[:rhq_agent_sysconf_file]    || RHQ_AGENT_SYSCONF_FILE
+      @exec_helper                = options[:exec_helper]               || ExecHelper.new( { :log => @log } )
+      @ip_helper                  = options[:ip_helper]                 || IPHelper.new( { :log => @log } )
 
       @appliance_name                   = agent_options[:appliance_name]
       @management_appliance_address     = agent_options[:management_appliance_address]
-      @agent_system_properties_file     = "/etc/sysconfig/rhq-agent"
     end
 
     def execute
@@ -53,12 +53,12 @@ module CirrASManagement
     end
 
     def load_configuration
-      unless File.exists?(@agent_system_properties_file)
-        @log.error "System configuration file for RQH Agent: #{@agent_system_properties_file} not found."
+      unless File.exists?(@rhq_agent_sysconf_file)
+        @log.error "System configuration file for RQH Agent: #{@rhq_agent_sysconf_file} not found."
         return false
       end
 
-      @agent_configuration_file = "#{File.read(@agent_system_properties_file).scan(/^RHQ_AGENT_HOME=(.*)$/)}/conf/agent-configuration.xml"
+      @agent_configuration_file = "#{File.read(@rhq_agent_sysconf_file).scan(/^RHQ_AGENT_HOME=(.*)$/)}/conf/agent-configuration.xml"
 
       unless File.exists?( @agent_configuration_file )
         @log.error "Configuration file for RQH Agent: #{@agent_configuration_file} not found."

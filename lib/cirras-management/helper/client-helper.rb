@@ -27,7 +27,7 @@ module CirrASManagement
   class ClientHelper
     def initialize( options = {} )
       @timeout    = options[:timeout]   || 2
-      @log        = options[:log]       || LOG
+      @log        = options[:log]       || Logger.new(STDOUT)
     end
 
     def get( url )
