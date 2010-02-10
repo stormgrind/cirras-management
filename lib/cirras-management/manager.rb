@@ -35,10 +35,15 @@ module CirrASManagement
   class Manager
     def initialize
 
-      @log = LogHelper.instance.log
+      @log = Logger.new(STDOUT)
+
+      configure :production do
+        @log = LogHelper.instance.log
+      end
 
       @config           = ConfigHelper.new( :log => @log ).config
       @@config          = @config
+      @@event_manager   = EventManager.new( :log => @log )
 
       @log.info "Setting up management environment for #{@config.appliance_name}"
 
@@ -46,9 +51,9 @@ module CirrASManagement
         @log.info "Setting up node managers..."
 
         if @config.running_on_ec2
-          @node_manager = AWSNodeManager.new( @config )
+          @node_manager = AWSNodeManager.new( @config, :log => @log )
         else
-          @node_manager = DefaultNodeManager.new( @config )
+          @node_manager = DefaultNodeManager.new( @config, :log => @log )
         end
 
         @@node_manager = @node_manager
@@ -67,11 +72,11 @@ module CirrASManagement
         end
 
         def notify( event, *args )
-          EventManager.instance.notify( false, prefix, event, *args )
+          Manager.event_manager.notify( false, prefix, event, *args )
         end
 
         def notify_threaded( event, *args )
-          EventManager.instance.notify( true, prefix, event, *args )
+          Manager.event_manager.notify( true, prefix, event, *args )
         end
       end
 
@@ -113,7 +118,7 @@ module CirrASManagement
         handler_helper = DefaultRequestHandlerHelper.new( to )
       end
 
-      EventManager.instance.register( api_version, prefix, handler_helper.handlers )
+      Manager.event_manager.register( api_version, prefix, handler_helper.handlers )
     end
 
     def wait_for_web_server
@@ -156,5 +161,10 @@ module CirrASManagement
         end
       end
     end
+
+    def self.event_manager
+      @@event_manager
+    end
+
   end
 end

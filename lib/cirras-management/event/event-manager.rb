@@ -18,15 +18,12 @@
 # Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 # 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
-require 'singleton'
-
 module CirrASManagement
   class EventManager
-    include Singleton
+    def initialize( options = {} )
+      @log = options[:log] || Logger.new(STDOUT)
 
-    def initialize
       @event_handlers   = {}
-      @log              = LogHelper.instance.log
     end
 
     def register( api_version, prefix, handlers )

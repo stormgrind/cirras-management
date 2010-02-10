@@ -27,6 +27,7 @@ module CirrASManagement
       @boxgrinder_config_file   = options[:boxgrinder_config_file]  || BOXGRINDER_CONFIG_FILE
       @rack_config_file         = options[:rack_config_file]        || RACK_CONFIG_FILE
       @leases_file              = options[:leases_file]             || LEASES_FILE
+      @client_helper            = options[:client_helper]           || ClientHelper.new( { :log => @log } )
     end
 
     def config
@@ -35,7 +36,7 @@ module CirrASManagement
 
       appliance_name      = boxgrinder_config['appliance_name']
 
-      @config = Config.new(
+      Config.new(
               :running_on_ec2   => is_ec2?,
               :leases_file      => @leases_file,
               :rack_config      => rack_config,
@@ -55,13 +56,7 @@ module CirrASManagement
       @log.info "Discovering if we're on EC2..."
 
       is_ec2 = false
-
-      begin
-        # trying to get local IP on EC2
-        RestClient.get 'http://169.254.169.254/latest/meta-data/local-ipv4'
-        is_ec2 = true
-      rescue
-      end
+      is_ec2 = true unless @client_helper.get('http://169.254.169.254/latest/meta-data/local-ipv4').nil?
 
       if is_ec2
         @log.info "We're on EC2!"
@@ -71,6 +66,5 @@ module CirrASManagement
 
       is_ec2
     end
-
   end
 end

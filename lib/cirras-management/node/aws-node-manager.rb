@@ -23,8 +23,8 @@ require 'cirras-management/node/base-node-manager'
 
 module CirrASManagement
   class AWSNodeManager < BaseNodeManager
-    def initialize( config )
-      super( config )
+    def initialize( config, options = {} )
+      super( config, options )
 
       @aws_data = {}
 

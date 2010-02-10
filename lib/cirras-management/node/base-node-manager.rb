@@ -30,8 +30,8 @@ require 'cirras-management/model/node'
 
 module CirrASManagement
   class BaseNodeManager
-    def initialize( config )
-      @log        = LogHelper.instance.log
+    def initialize( config, options = {} )
+      @log        = options[:log] || Logger.new(STDOUT)
       @nodes      = {}
       @addresses  = []
       @config     = config

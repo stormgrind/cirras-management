@@ -22,8 +22,8 @@ require 'cirras-management/node/base-node-manager'
 
 module CirrASManagement
   class DefaultNodeManager < BaseNodeManager
-    def initialize( config )
-      super( config )
+    def initialize( config, options = {} )
+      super( config, options )
 
       @leases_file  = @config.leases_file
     end
