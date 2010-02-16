@@ -36,6 +36,8 @@ module CirrASManagement
       @ec2.describe_availability_zones
     end
 
+    attr_reader :aws_data
+
     def get_aws_data
       @aws_data = @client_helper.get( "http://169.254.169.254/latest/user-data" )    
     end
@@ -44,6 +46,7 @@ module CirrASManagement
       raise "Please provide access keys as user data while launching this AMI. You must relaunch this AMI with valid user data." if @aws_data.nil?
       raise "Please provide access key as user data while launching this AMI: access_key: YOUR_ACCESS_KEY" if @aws_data['access_key'].nil?
       raise "Please provide secret access key as user data while launching this AMI: secret_access_key: YOUR_SECRET_ACCESS_KEY" if @aws_data['secret_access_key'].nil?
+      raise "Please provide bucket location to store cluster topology information as user data while launching this AMI: bucket_location: BUCKET/LOCATION" if @aws_data['bucket_location'].nil?
     end
 
     def node_addresses

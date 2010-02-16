@@ -37,7 +37,7 @@ module CirrASManagement
       appliance_name      = boxgrinder_config['appliance_name']
 
       Config.new(
-              :running_on_ec2   => is_ec2?,
+              :running_on_ec2  => is_ec2?,
               :leases_file      => @leases_file,
               :rack_config      => rack_config,
               :node             => Node.new( appliance_name ),

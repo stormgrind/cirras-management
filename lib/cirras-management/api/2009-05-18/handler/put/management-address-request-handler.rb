@@ -24,7 +24,9 @@ require 'cirras-management/helper/client-helper'
 require 'cirras-management/api/commands/update-proxy-list-command'
 require 'cirras-management/api/commands/update-jvm-route-command'
 require 'cirras-management/api/commands/update-rhq-agent-command'
+require 'cirras-management/api/commands/update-gossip-host-address-command'
 require 'cirras-management/api/commands/update-peer-id-command'
+require 'cirras-management/api/commands/update-s3ping-credentials-command'
 
 module CirrASManagement
   class ManagementAddressRequestHandler < BaseRequestHandler
@@ -39,7 +41,13 @@ module CirrASManagement
         case @config.appliance_name
           when APPLIANCE_TYPE[:backend]
             # TODO: this should be moved from here and executed periodically we should only update here management appliance address.
+            # TODO: it should be executed only if JBoss AS is running
 
+            if @config.running_on_ec2
+              UpdateS3PingCredentialsCommand.new( management_appliance_address ).execute
+            end
+
+            #UpdateGossipHostAddressCommand.new( management_appliance_address ).execute
             UpdateProxyListCommand.new( management_appliance_address ).execute
             UpdatePeerIdCommand.new( management_appliance_address ).execute
             UpdateJVMRouteCommand.new.execute

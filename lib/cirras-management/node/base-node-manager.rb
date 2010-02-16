@@ -156,7 +156,6 @@ module CirrASManagement
       nodes.each do |ip, node|
         @log.debug "Pushing management node address #{address} to #{node.name} on #{ip}..."
         @client_helper.put( "http://#{ip}:#{@config.port}/latest/address/#{APPLIANCE_TYPE[:management]}", :address => address )
-        @log.debug "Done"
         count += 1
       end
 

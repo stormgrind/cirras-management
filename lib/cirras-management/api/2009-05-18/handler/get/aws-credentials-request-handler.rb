@@ -18,27 +18,41 @@
 # Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 # 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
-require 'cirras-management/helper/log-helper'
+require 'cirras-management/model/node'
+require 'cirras-management/event/event-manager'
+require 'cirras-management/api/2009-05-18/handler/base-request-handler'
 
 module CirrASManagement
-  APPLIANCE_TYPE = {
-          :backend        => "back-end",
-          :frontend       => "front-end",
-          :management     => "management",
-          :postgis        => "postgis"
-  }
+  class AWSCredentialsRequestHandler < BaseRequestHandler
+    def initialize( path, to )
+      super( path, to )
+    end
 
-  APIS = [ "2009-05-18" ]
+    def aws_credentials_request
+    end
 
-  DEFAULT_FRONT_END_PORT  = 80
-  JBOSS_HOME              = "/opt/jboss-as6"
-  JBOSS_SYSCONFIG_FILE    = "/etc/sysconfig/jboss-as6"
-  BOXGRINDER_CONFIG_FILE  = "/etc/boxgrinder"
-  RACK_CONFIG_FILE        = "config/config.yaml"
-  LEASES_FILE             = "/var/lib/dhcpd/dhcpd.leases"
-  RHQ_AGENT_SYSCONF_FILE  = "/etc/sysconfig/rhq-agent"
+    def define_handle
+      get @path do
 
-  LOG_DEFAULT_FILE        = "/var/log/cirras-management/default.log"
-  LOG_WEB_FILE            = "/var/log/cirras-management/web.log"
-  LOG_CLIENT_FILE         = "/var/log/cirras-management/client.log"
+        back_end_node_addresses = []
+
+        for node in Manager.node_manager.nodes.values
+          if node.name.eql?("back-end")
+            back_end_node_addresses.push(node.address)
+          end
+        end
+
+        ip = request.env['HTTP_X_FORWARDED_FOR'].nil? ? request.env['REMOTE_ADDR'].to_s : request.env['HTTP_X_FORWARDED_FOR'].to_s
+
+        if back_end_node_addresses.include?(ip)
+          # get credentials and send it back
+          Base64.encode64( Manager.node_manager.aws_data.to_yaml )
+          return
+        end
+
+        status 404
+        "Not found"
+      end
+    end
+  end
 end

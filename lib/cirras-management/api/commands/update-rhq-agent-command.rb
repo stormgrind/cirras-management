@@ -58,7 +58,7 @@ module CirrASManagement
         return false
       end
 
-      @agent_configuration_file = "#{File.read(@rhq_agent_sysconf_file).scan(/^RHQ_AGENT_HOME=(.*)$/)}/conf/agent-configuration.xml"
+      @agent_configuration_file = "#{File.read(@rhq_agent_sysconf_file).scan(/^RHQ_AGENT_HOME=(.*)$/).to_s}/conf/agent-configuration.xml"
 
       unless File.exists?( @agent_configuration_file )
         @log.error "Configuration file for RQH Agent: #{@agent_configuration_file} not found."

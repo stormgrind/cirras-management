@@ -18,27 +18,17 @@
 # Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 # 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
-require 'cirras-management/helper/log-helper'
+require 'cirras-management/api/commands/base-jboss-as-command'
 
 module CirrASManagement
-  APPLIANCE_TYPE = {
-          :backend        => "back-end",
-          :frontend       => "front-end",
-          :management     => "management",
-          :postgis        => "postgis"
-  }
+  class UpdateGossipHostAddressCommand < BaseJBossASCommand
 
-  APIS = [ "2009-05-18" ]
+    def initialize( options = {} )
+      super( { :log => options[:log] } )
+    end
 
-  DEFAULT_FRONT_END_PORT  = 80
-  JBOSS_HOME              = "/opt/jboss-as6"
-  JBOSS_SYSCONFIG_FILE    = "/etc/sysconfig/jboss-as6"
-  BOXGRINDER_CONFIG_FILE  = "/etc/boxgrinder"
-  RACK_CONFIG_FILE        = "config/config.yaml"
-  LEASES_FILE             = "/var/lib/dhcpd/dhcpd.leases"
-  RHQ_AGENT_SYSCONF_FILE  = "/etc/sysconfig/rhq-agent"
+    def execute
 
-  LOG_DEFAULT_FILE        = "/var/log/cirras-management/default.log"
-  LOG_WEB_FILE            = "/var/log/cirras-management/web.log"
-  LOG_CLIENT_FILE         = "/var/log/cirras-management/client.log"
+    end
+  end
 end

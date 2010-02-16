@@ -29,6 +29,7 @@ module CirrASManagement
 
       register_handler( :address_request, AddressRequestHandler.new( "/#{@prefix}/address/:appliance", @to ) )
       register_handler( :peer_id_request, PeerIDRequestHandler.new( "/#{@prefix}/peer-id", @to ) )
+      register_handler( :aws_credentials_request, PeerIDRequestHandler.new( "/#{@prefix}/awscredentials", @to ) )
     end
   end
 end
