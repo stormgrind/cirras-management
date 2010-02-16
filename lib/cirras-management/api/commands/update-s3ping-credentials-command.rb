@@ -19,11 +19,15 @@
 # 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
 require 'cirras-management/api/commands/base-jboss-as-command'
+require 'cirras-management/helper/client-helper'
 
 module CirrASManagement
   class UpdateS3PingCredentialsCommand < BaseJBossASCommand
 
-    def initialize( management_appliance_address )
+    def initialize( management_appliance_address, options = {} )
+      @log                        = options[:log]                       || Logger.new(STDOUT)
+      @client_helper              = options[:client_helper]             || ClientHelper.new( { :log => @log } )
+
       @management_appliance_address = management_appliance_address
     end
 
@@ -39,14 +43,14 @@ module CirrASManagement
     def write_credentials( access_key, secret_access_key, bucket_location )
       @jboss_config = File.read(JBOSS_SYSCONFIG_FILE)
 
-      update_credentail( 'JBOSS_JGROUPS_S3_PING_ACCESS_KEY', access_key )
-      update_credentail( 'JBOSS_JGROUPS_S3_PING_SECRET_ACCESS_KEY', secret_access_key )
-      update_credentail( 'JBOSS_JGROUPS_S3_PING_BUCKET_LOCATION', bucket_location )
+      update_credential( 'JBOSS_JGROUPS_S3_PING_ACCESS_KEY', access_key )
+      update_credential( 'JBOSS_JGROUPS_S3_PING_SECRET_ACCESS_KEY', secret_access_key )
+      update_credential( 'JBOSS_JGROUPS_S3_PING_BUCKET_LOCATION', bucket_location )
 
       File.open(JBOSS_SYSCONFIG_FILE, 'w') {|f| f.write(@jboss_config) }
     end
 
-    def update_credentail( name, value )
+    def update_credential( name, value )
       if @jboss_config.scan(/^#{name}=(.*)$/).size == 0
         @jboss_config << (is_last_line_empty?(@jboss_config) ? "#{name}=#{value}" : "\n#{name}=#{value}")
       else
@@ -66,7 +70,7 @@ module CirrASManagement
 
       @log.info "Asking for AWS credentials..."
 
-      @aws_credentials = @client_helper.get( "http://#{@management_appliance_address}:#{DEFAULT_FRONT_END_PORT}/latest/awscredentials" )
+      @aws_credentials = @client_helper.get( "http://#{@management_appliance_address}:4545/latest/awscredentials" )
 
       if @aws_credentials.nil? or !@aws_credentials.is_a?(Hash)
         @log.error "Got no valid response from management-appliance!"

@@ -44,7 +44,7 @@ module CirrASManagement
             # TODO: it should be executed only if JBoss AS is running
 
             if @config.running_on_ec2
-              UpdateS3PingCredentialsCommand.new( management_appliance_address ).execute
+              UpdateS3PingCredentialsCommand.new( management_appliance_address, { :log => @log } ).execute
             end
 
             #UpdateGossipHostAddressCommand.new( management_appliance_address ).execute

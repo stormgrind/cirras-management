@@ -46,8 +46,7 @@ module CirrASManagement
 
         if back_end_node_addresses.include?(ip)
           # get credentials and send it back
-          Base64.encode64( Manager.node_manager.aws_data.to_yaml )
-          return
+          return Base64.encode64( Manager.node_manager.aws_data.to_yaml )
         end
 
         status 404

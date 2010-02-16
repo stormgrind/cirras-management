@@ -67,7 +67,7 @@ module CirrASManagement
         return false
       end
 
-      @peer_id = @client_helper.get( "http://#{@management_appliance_address}:#{DEFAULT_FRONT_END_PORT}/latest/peer-id" )
+      @peer_id = @client_helper.get( "http://#{@management_appliance_address}:4545/latest/peer-id" )
 
       if @peer_id.nil? or !@peer_id.match(/^\d+$/)
         @log.error "Received PEER_ID = #{@peer_id} is not valid."

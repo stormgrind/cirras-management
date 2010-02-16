@@ -70,7 +70,7 @@ module CirrASManagement
 
       @log.info "Asking for front-end appliance address list..."
 
-      @proxies = @client_helper.get( "http://#{@management_appliance_address}:#{DEFAULT_FRONT_END_PORT}/latest/address/#{APPLIANCE_TYPE[:frontend]}" )
+      @proxies = @client_helper.get( "http://#{@management_appliance_address}:4545/latest/address/#{APPLIANCE_TYPE[:frontend]}" )
 
       if @proxies.nil? or !@proxies.is_a?(Array)
         @log.error "Got no valid response from management-appliance!"

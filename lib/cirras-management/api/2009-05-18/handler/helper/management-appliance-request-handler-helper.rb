@@ -21,6 +21,7 @@
 require 'cirras-management/api/2009-05-18/handler/helper/base-request-handler-helper'
 require 'cirras-management/api/2009-05-18/handler/get/address-request-handler'
 require 'cirras-management/api/2009-05-18/handler/get/peer-id-request-handler'
+require 'cirras-management/api/2009-05-18/handler/get/aws-credentials-request-handler'
 
 module CirrASManagement
   class ManagementApplianceRequestHandlerHelper < BaseRequestHandlerHelper
@@ -29,7 +30,7 @@ module CirrASManagement
 
       register_handler( :address_request, AddressRequestHandler.new( "/#{@prefix}/address/:appliance", @to ) )
       register_handler( :peer_id_request, PeerIDRequestHandler.new( "/#{@prefix}/peer-id", @to ) )
-      register_handler( :aws_credentials_request, PeerIDRequestHandler.new( "/#{@prefix}/awscredentials", @to ) )
+      register_handler( :aws_credentials_request, AWSCredentialsRequestHandler.new( "/#{@prefix}/awscredentials", @to ) )
     end
   end
 end
