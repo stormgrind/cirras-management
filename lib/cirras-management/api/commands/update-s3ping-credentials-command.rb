@@ -45,11 +45,11 @@ module CirrASManagement
       @log.debug "Reading JBoss AS config file..."
       @jboss_config = File.read(JBOSS_SYSCONFIG_FILE)
 
-      unless read_credentials.eql?(@aws_credentials)
+      unless (read_credentials == @aws_credentials)
         write_credentials
         return true
       end
-      
+
       false
     end
 
@@ -59,6 +59,8 @@ module CirrASManagement
       update_credential( ACCESS_KEY, @aws_credentials['access_key'] )
       update_credential( SECRET_ACCESS_KEY, @aws_credentials['secret_access_key'] )
       update_credential( BUCKET, @aws_credentials['bucket'] )
+
+      add_new_line(@jboss_config)
 
       File.open(JBOSS_SYSCONFIG_FILE, 'w') {|f| f.write(@jboss_config) }
     end

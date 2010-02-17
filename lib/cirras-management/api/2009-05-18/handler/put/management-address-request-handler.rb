@@ -55,7 +55,7 @@ module CirrASManagement
 
               @back_end_cmds_running = false
             else
-              @log.debug "Another set of JBoss AS command are being executed, skipping..."
+              @log.debug "Another set of JBoss AS commands is being executed, skipping..."
             end
 
           else

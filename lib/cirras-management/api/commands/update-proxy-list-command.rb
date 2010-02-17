@@ -29,6 +29,7 @@ module CirrASManagement
 
       @mgmt_address = options[:mgmt_address]
     end
+
     def execute
       unless load_front_end_list
         @log.error "Proxy list in JBoss AS instance wasn't updated, check logs."
