@@ -47,24 +47,25 @@ module CirrASManagement
     def execute
       @log.debug "Executing commands for #{@environment.to_s.upcase} environment..."
       execute_commands(COMMANDS[@environment])
-      @log.debug "Default commands executed."
-
-      unless COMMANDS[:running][@environment].nil?
-        unless is_jboss_running?
-          @restart = false
-          # start JBoss and wait for boot
-          start_jboss
-        end
-
-        @log.debug "Executing commands for #{@environment.to_s.upcase} environment ..."
-        execute_commands(COMMANDS[:running][@environment])
-      end
+      @log.debug "Commands for #{@environment.to_s.upcase} environment executed."
 
       unless is_jboss_running?
+        @restart = false
+        # start JBoss and wait for boot
         start_jboss
-      else
-        restart_jboss if @restart
       end
+
+      unless COMMANDS[:running][@environment].nil?
+        @log.debug "Executing commands for #{@environment.to_s.upcase} environment (JBoss running)..."
+        execute_commands(COMMANDS[:running][@environment])
+        @log.debug "Commands for #{@environment.to_s.upcase} environment executed (JBoss running)."
+      end
+
+      @log.debug "Executing default commands (JBoss running)..."
+      execute_commands(COMMANDS[:running][:default])
+      @log.debug "Default commands executed (JBoss running)."
+
+      restart_jboss if @restart
     end
 
     def execute_commands( commands )

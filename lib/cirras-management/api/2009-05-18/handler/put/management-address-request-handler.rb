@@ -27,8 +27,6 @@ require 'cirras-management/api/commands/jboss-command-factory'
 module CirrASManagement
   class ManagementAddressRequestHandler < BaseRequestHandler
 
-    JBOSS_COMMANDS = [ UpdateGossipHostAddressCommand, UpdateS3PingCredentialsCommand, UpdatePeerIdCommand, UpdateProxyListCommand, UpdateJVMRouteCommand ]
-
     def initialize( path, to )
       super( path, to )
 
