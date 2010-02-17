@@ -60,7 +60,11 @@ module CirrASManagement
         execute_commands(COMMANDS[:running][@environment])
       end
 
-      restart_jboss if @restart
+      unless is_jboss_running?
+        start_jboss
+      else
+        restart_jboss if @restart
+      end
     end
 
     def execute_commands( commands )
