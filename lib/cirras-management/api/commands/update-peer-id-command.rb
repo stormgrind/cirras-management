@@ -25,10 +25,10 @@ require 'cirras-management/api/commands/base-jboss-as-command'
 module CirrASManagement
   class UpdatePeerIdCommand < BaseJBossASCommand
 
-    def initialize( management_appliance_address, options = {} )
+    def initialize( options = {} )
       super( { :log => options[:log] } )
 
-      @management_appliance_address = management_appliance_address
+      @mgmt_address = options[:mgmt_address]
     end
 
     def execute
@@ -59,15 +59,17 @@ module CirrASManagement
         @log.debug "Service started."
         @log.info "PeerID updated."
       end
+
+      false
     end
 
     def load_peer_id
-      if @management_appliance_address.nil?
+      if @mgmt_address.nil?
         @log.error "No management appliance address specified, cannot get PeerId."
         return false
       end
 
-      @peer_id = @client_helper.get( "http://#{@management_appliance_address}:4545/latest/peer-id" )
+      @peer_id = @client_helper.get( "http://#{@mgmt_address}:#{MANAGEMENT_PORT}/latest/peer-id" )
 
       if @peer_id.nil? or !@peer_id.match(/^\d+$/)
         @log.error "Received PEER_ID = #{@peer_id} is not valid."

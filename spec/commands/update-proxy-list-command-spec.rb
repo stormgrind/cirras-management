@@ -10,12 +10,12 @@ module CirrASManagement
 
     before(:each) do
       Socket.should_receive(:gethostname).any_number_of_times.and_return("localhost")
-      @cmd          = UpdateProxyListCommand.new( "10.1.0.1", { :log => Logger.new('/dev/null') } )
+      @cmd          = UpdateProxyListCommand.new( :mgmt_address => "10.1.0.1", :log => Logger.new('/dev/null') )
       @exec_helper  = @cmd.instance_variable_get(:@exec_helper)
     end
 
     it "should not break if there is nil injected as management address" do
-      UpdateProxyListCommand.new( nil, { :log => Logger.new('/dev/null') } ).execute
+      UpdateProxyListCommand.new( :log => Logger.new('/dev/null') ).execute
     end
 
     it "should add one proxy" do

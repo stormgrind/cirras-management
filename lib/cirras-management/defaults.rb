@@ -31,7 +31,9 @@ module CirrASManagement
   APIS = [ "2009-05-18" ]
 
   DEFAULT_FRONT_END_PORT  = 80
+  MANAGEMENT_PORT         = 4545
   JBOSS_HOME              = "/opt/jboss-as6"
+  JBOSS_SERVICE_NAME      = "jboss-as6"
   JBOSS_SYSCONFIG_FILE    = "/etc/sysconfig/jboss-as6"
   BOXGRINDER_CONFIG_FILE  = "/etc/boxgrinder"
   RACK_CONFIG_FILE        = "config/config.yaml"

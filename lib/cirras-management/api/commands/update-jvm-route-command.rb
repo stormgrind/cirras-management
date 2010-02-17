@@ -46,6 +46,8 @@ module CirrASManagement
         twiddle_execute( "set jboss.web:type=Engine jvmRoute #{@jvm_route}" )
         @log.info "JVMRoute updated."
       end
+
+      false
     end
 
     def calculate_jvm_route

@@ -31,8 +31,8 @@ module CirrASManagement
       @exec_helper                = options[:exec_helper]               || ExecHelper.new( { :log => @log } )
       @ip_helper                  = options[:ip_helper]                 || IPHelper.new( { :log => @log } )
 
-      @appliance_name                   = agent_options[:appliance_name]
-      @management_appliance_address     = agent_options[:management_appliance_address]
+      @appliance_name             = agent_options[:appliance_name]
+      @mgmt_address               = agent_options[:management_appliance_address]
     end
 
     def execute
@@ -42,7 +42,7 @@ module CirrASManagement
       end
 
       update_entry( 'rhq.agent.name', "#{@appliance_name}#{@appliance_name.nil? ? "" : "-"}#{Socket.gethostname}" )
-      update_entry( 'rhq.agent.server.bind-address', @management_appliance_address )
+      update_entry( 'rhq.agent.server.bind-address', @mgmt_address )
 
       update_file
       restart_agent

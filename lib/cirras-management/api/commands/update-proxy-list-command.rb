@@ -24,10 +24,10 @@ require 'cirras-management/api/commands/base-jboss-as-command'
 
 module CirrASManagement
   class UpdateProxyListCommand < BaseJBossASCommand
-    def initialize( management_appliance_address, options = {} )
+    def initialize( options = {} )
       super( { :log => options[:log] } )
 
-      @management_appliance_address = management_appliance_address
+      @mgmt_address = options[:mgmt_address]
     end
     def execute
       unless load_front_end_list
@@ -60,17 +60,19 @@ module CirrASManagement
           @log.info "Proxy added."
         end
       end
+
+      false
     end
 
     def load_front_end_list
-      if (@management_appliance_address.nil?)
+      if (@mgmt_address.nil?)
         @log.error "No management appliance address specified, cannot get front-end addresses."
         return false
       end
 
       @log.info "Asking for front-end appliance address list..."
 
-      @proxies = @client_helper.get( "http://#{@management_appliance_address}:4545/latest/address/#{APPLIANCE_TYPE[:frontend]}" )
+      @proxies = @client_helper.get( "http://#{@mgmt_address}:#{MANAGEMENT_PORT}/latest/address/#{APPLIANCE_TYPE[:frontend]}" )
 
       if @proxies.nil? or !@proxies.is_a?(Array)
         @log.error "Got no valid response from management-appliance!"

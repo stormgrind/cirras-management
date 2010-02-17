@@ -29,6 +29,7 @@ module CirrASManagement
 
     def execute
 
+      false
     end
   end
 end

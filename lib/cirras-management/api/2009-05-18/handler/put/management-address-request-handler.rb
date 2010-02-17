@@ -21,17 +21,19 @@
 require 'cirras-management/api/2009-05-18/handler/base-request-handler'
 require 'cirras-management/helper/log-helper'
 require 'cirras-management/helper/client-helper'
-require 'cirras-management/api/commands/update-proxy-list-command'
-require 'cirras-management/api/commands/update-jvm-route-command'
 require 'cirras-management/api/commands/update-rhq-agent-command'
-require 'cirras-management/api/commands/update-gossip-host-address-command'
-require 'cirras-management/api/commands/update-peer-id-command'
-require 'cirras-management/api/commands/update-s3ping-credentials-command'
+require 'cirras-management/api/commands/jboss-command-factory'
 
 module CirrASManagement
   class ManagementAddressRequestHandler < BaseRequestHandler
+
+    JBOSS_COMMANDS = [ UpdateGossipHostAddressCommand, UpdateS3PingCredentialsCommand, UpdatePeerIdCommand, UpdateProxyListCommand, UpdateJVMRouteCommand ]
+
     def initialize( path, to )
       super( path, to )
+
+      @environment            = @config.running_on_ec2 ? :ec2 : :default
+      @back_end_cmds_running  = false
     end
 
     def management_address_request( management_appliance_address )
@@ -41,16 +43,20 @@ module CirrASManagement
         case @config.appliance_name
           when APPLIANCE_TYPE[:backend]
             # TODO: this should be moved from here and executed periodically we should only update here management appliance address.
-            # TODO: it should be executed only if JBoss AS is running
 
-            if @config.running_on_ec2
-              UpdateS3PingCredentialsCommand.new( management_appliance_address, { :log => @log } ).execute
+            unless @back_end_cmds_running
+              @back_end_cmds_running = true
+              begin
+                JBossCommandFactory.new( :log => @log, :mgmt_address => management_appliance_address, :environment => @environment ).execute
+              rescue => e
+                @log.error e
+                @log.error "An error occurred, see logs."
+              end
+
+              @back_end_cmds_running = false
+            else
+              @log.debug "Another set of JBoss AS command are being executed, skipping..."
             end
-
-            #UpdateGossipHostAddressCommand.new( management_appliance_address ).execute
-            UpdateProxyListCommand.new( management_appliance_address ).execute
-            UpdatePeerIdCommand.new( management_appliance_address ).execute
-            UpdateJVMRouteCommand.new.execute
 
           else
             if @management_address != management_appliance_address
@@ -66,6 +72,10 @@ module CirrASManagement
         @log.error "Something bad happened, but it shouldn't..."
         @log.error e
       end
+    end
+
+    def is_jboss_running?
+
     end
 
     def define_handle

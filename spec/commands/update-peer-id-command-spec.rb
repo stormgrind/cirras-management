@@ -11,13 +11,13 @@ module CirrASManagement
     before(:each) do
       Socket.should_receive(:gethostname).any_number_of_times.and_return("localhost")
 
-      @cmd            = UpdatePeerIdCommand.new( "10.1.0.1", { :log => Logger.new('/dev/null') } )
+      @cmd            = UpdatePeerIdCommand.new( :mgmt_address => "10.1.0.1", :log => Logger.new('/dev/null') )
       @exec_helper    = @cmd.instance_variable_get(:@exec_helper)
       @client_helper  = @cmd.instance_variable_get(:@client_helper)
     end
 
     it "should not break if there is nil injected as management address" do
-      UpdatePeerIdCommand.new( nil, { :log => Logger.new('/dev/null') } ).execute
+      UpdatePeerIdCommand.new( :log => Logger.new('/dev/null') ).execute
     end
 
     it "should not break if completely invalid PeerID is received" do
@@ -69,12 +69,12 @@ module CirrASManagement
     end
 
     it "should load peer id" do
-      @client_helper.should_receive(:get).with( "http://10.1.0.1:80/latest/peer-id" ).and_return( "2" )
+      @client_helper.should_receive(:get).with( "http://10.1.0.1:4545/latest/peer-id" ).and_return( "2" )
       @cmd.load_peer_id.should == true
     end
 
     it "should not load peer id" do
-      @client_helper.should_receive(:get).with( "http://10.1.0.1:80/latest/peer-id" ).and_return( "2xcsf" )
+      @client_helper.should_receive(:get).with( "http://10.1.0.1:4545/latest/peer-id" ).and_return( "2xcsf" )
       @cmd.load_peer_id.should == false
     end
 
