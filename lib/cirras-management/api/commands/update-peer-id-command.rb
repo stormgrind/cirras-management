@@ -71,7 +71,7 @@ module CirrASManagement
 
       @peer_id = @client_helper.get( "http://#{@mgmt_address}:#{MANAGEMENT_PORT}/latest/peer-id" )
 
-      if @peer_id.nil? or !@peer_id.match(/^\d+$/)
+      if @peer_id.nil?
         @log.error "Received PEER_ID = #{@peer_id} is not valid."
         return false
       end
