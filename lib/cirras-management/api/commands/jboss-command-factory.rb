@@ -70,9 +70,9 @@ module CirrASManagement
 
     def execute_commands( commands )
       commands.each do |cmd|
-        @log.debug "Executing #{cmd.class.name}..."
+        @log.debug "Executing #{cmd}..."
         @restart = true if cmd.new( :log => @log, :mgmt_address => @mgmt_address ).execute
-        @log.debug "Command #{cmd.class.name} executed."
+        @log.debug "Command #{cmd} executed."
       end
     end
 

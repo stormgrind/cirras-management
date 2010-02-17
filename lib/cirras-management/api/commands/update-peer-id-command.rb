@@ -45,7 +45,7 @@ module CirrASManagement
 
       @log.info "Current PeerID value is '#{current_value}'"
 
-      if (current_value.eql?(@peer_id))
+      if (current_value.eql?(@peer_id.to_s))
         @log.info "Requested value is already set, no need to update, skipping."
       else
         @log.info "Updating to '#{@peer_id}'..."
