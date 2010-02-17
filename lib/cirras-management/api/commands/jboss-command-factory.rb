@@ -76,9 +76,13 @@ module CirrASManagement
     end
 
     def is_jboss_running?
-      pids = @exec_helper.execute("pidof -x '/bin/sh'")
+      pids          = @exec_helper.execute("pidof -x '/bin/sh'")
+      ip            = @ip_helper.local_ip
 
-      pids.each(" ") { |pid| return true if `ps -fp #{pid.strip} | grep 'org.jboss.Main' | grep '#{@ip_helper.local_ip}'`.length > 0 }
+      # TODO this probably should be changed
+      configuration = @environment.eql?(:ec2) ? "cluster-ec2" : "cluster"
+
+      pids.each(" ") { |pid| return true if `ps -fp #{pid.strip} | grep '#{JBOSS_HOME}/bin/run.sh' | grep #{ip} | grep #{configuration}`.length > 0 }
       false
     end
 
