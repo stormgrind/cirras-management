@@ -69,9 +69,9 @@ module CirrASManagement
 
     def execute_commands( commands )
       commands.each do |cmd|
-        @log.debug "Executing #{cmd.class}..."
+        @log.debug "Executing #{cmd.class.name}..."
         @restart = true if cmd.new( :log => @log, :mgmt_address => @mgmt_address ).execute
-        @log.debug "Command #{cmd.class} executed."
+        @log.debug "Command #{cmd.class.name} executed."
       end
     end
 
@@ -86,7 +86,7 @@ module CirrASManagement
 
       pids.each(" ") do |pid|
         if `ps -fp #{pid.strip} | grep '#{JBOSS_HOME}/bin/run.sh' | grep #{ip} | grep #{configuration}`.length > 0
-          jboss_pid = pid
+          jboss_pid = pid.strip
           break
         end
       end

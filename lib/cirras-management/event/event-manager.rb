@@ -62,12 +62,12 @@ module CirrASManagement
     protected
 
     def notify_internal( prefix, event, *args )
-      @log.debug "Handling event #{event} for prefix #{prefix}..."
+      # @log.debug "Handling event #{event} for prefix #{prefix}..."
       @event_handlers[prefix][event].each do |handler|
-        @log.debug "Notifying handler #{handler.class}"
+        #@log.debug "Notifying handler #{handler.class}"
         handler.send event, *args
       end
-      @log.debug "Event #{event} was successfully handled"
+      # @log.debug "Event #{event} was successfully handled"
     end
   end
 end

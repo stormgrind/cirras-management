@@ -57,16 +57,15 @@ module CirrASManagement
             else
               @log.debug "Another set of JBoss AS commands is being executed, skipping..."
             end
+        end
 
-          else
-            if @management_address != management_appliance_address
-              @management_address = management_appliance_address
+        if @management_address != management_appliance_address
+          @management_address = management_appliance_address
 
-              RHQAgentUpdateCommand.new({
-                      :appliance_name => @config.appliance_name,
-                      :management_appliance_address => @management_address
-              }).execute
-            end
+          RHQAgentUpdateCommand.new({
+                  :appliance_name => @config.appliance_name,
+                  :management_appliance_address => @management_address
+          }).execute
         end
       rescue => e
         @log.error "Something bad happened, but it shouldn't..."
