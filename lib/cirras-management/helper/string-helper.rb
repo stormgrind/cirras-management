@@ -18,45 +18,31 @@
 # Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 # 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
-require 'cirras-management/helper/log-helper'
-require 'cirras-management/helper/exec-helper'
-require 'cirras-management/api/commands/base-jboss-as-command'
-
 module CirrASManagement
-  class UpdateJVMRouteCommand < BaseJBossASCommand
-
+  class StringHelper
     def initialize( options = {} )
-      super( { :log => options[:log] } )
+      @log = options[:log] || Logger.new(STDOUT)
     end
 
-    def execute
-      unless calculate_jvm_route
-        @log.error "Couldn't calculate JVMRoute, check logs for errors."
-        return
-      end
-
-      current_jvm_route = twiddle_execute( "get jboss.web:type=Engine jvmRoute" ).scan(/^jvmRoute=(.*)$/).to_s
-
-      @log.info "Current JVMRoute value is '#{current_jvm_route}'"
-
-      if (current_jvm_route.eql?(@jvm_route))
-        @log.info "Requested value is already set, no need to update, skipping."
+    def update_config( string, name, value )
+      if string.scan(/^#{name}=(.*)$/).size == 0
+        string << (is_last_line_empty?(string) ? "#{name}=#{value}" : "\n#{name}=#{value}")
       else
-        @log.info "Updating to '#{@jvm_route}'..."
-        twiddle_execute( "set jboss.web:type=Engine jvmRoute #{@jvm_route}" )
-        @log.info "JVMRoute updated."
+        string.gsub!( /^#{name}=(.*)$/, "#{name}=#{value}" )
       end
-
-      false
     end
 
-    def calculate_jvm_route
-      ip_address  = @ip_helper.local_ip
-      return false if ip_address.nil?
-
-      @jvm_route = "#{Socket.gethostname}-#{ip_address}"
-
-      true
+    def prop_value( string, name )
+      string.scan(/^#{name}=(.*)/).to_s
     end
+
+    def is_last_line_empty?( string )
+      string.match(/^(.*)$\z/).nil? ? true : false
+    end
+
+    def add_new_line( string )
+      string << "\n" unless is_last_line_empty?( string )
+    end
+
   end
 end

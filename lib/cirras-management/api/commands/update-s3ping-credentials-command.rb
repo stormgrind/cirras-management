@@ -20,6 +20,7 @@
 
 require 'cirras-management/api/commands/base-jboss-as-command'
 require 'cirras-management/helper/client-helper'
+require 'cirras-management/helper/string-helper'
 
 module CirrASManagement
   class UpdateS3PingCredentialsCommand < BaseJBossASCommand
@@ -31,6 +32,7 @@ module CirrASManagement
     def initialize( options = {} )
       @log             = options[:log]            || Logger.new(STDOUT)
       @client_helper   = options[:client_helper]  || ClientHelper.new( { :log => @log } )
+      @string_helper   = options[:string_helper]  || StringHelper.new( { :log => @log } )
       @mgmt_address    = options[:mgmt_address]
     end
 
@@ -50,17 +52,19 @@ module CirrASManagement
         return true
       end
 
+      @log.debug "Current and new AWS credentials are same, skipping..."
+
       false
     end
 
     def write_credentials
       @log.info "Writing new AWS credentials to JBoss AS config file..."
 
-      update_credential( ACCESS_KEY, @aws_credentials['access_key'] )
-      update_credential( SECRET_ACCESS_KEY, @aws_credentials['secret_access_key'] )
-      update_credential( BUCKET, @aws_credentials['bucket'] )
+      @string_helper.update_config( @jboss_config, ACCESS_KEY, @aws_credentials['access_key'] )
+      @string_helper.update_config( @jboss_config, SECRET_ACCESS_KEY, @aws_credentials['secret_access_key'] )
+      @string_helper.update_config( @jboss_config, @aws_credentials['bucket'] )
 
-      add_new_line(@jboss_config)
+      @string_helper.add_new_line(@jboss_config)
 
       File.open(JBOSS_SYSCONFIG_FILE, 'w') {|f| f.write(@jboss_config) }
     end
@@ -70,27 +74,11 @@ module CirrASManagement
 
       credentials = {}
 
-      credentials['access_key']        = @jboss_config.scan(/^#{ACCESS_KEY}=(.*)/).to_s
-      credentials['secret_access_key'] = @jboss_config.scan(/^#{SECRET_ACCESS_KEY}=(.*)/).to_s
-      credentials['bucket']            = @jboss_config.scan(/^#{BUCKET}=(.*)/).to_s
+      credentials['access_key']        = @string_helper.prop_value( @jboss_config, ACCESS_KEY )
+      credentials['secret_access_key'] = @string_helper.prop_value( @jboss_config, SECRET_ACCESS_KEY )
+      credentials['bucket']            = @string_helper.prop_value( @jboss_config, BUCKET )
 
       credentials
-    end
-
-    def add_new_line( string )
-      string << "\n" unless is_last_line_empty?( string )
-    end
-
-    def update_credential( name, value )
-      if @jboss_config.scan(/^#{name}=(.*)$/).size == 0
-        @jboss_config << (is_last_line_empty?(@jboss_config) ? "#{name}=#{value}" : "\n#{name}=#{value}")
-      else
-        @jboss_config.gsub!( /^#{name}=(.*)$/, "#{name}=#{value}" )
-      end
-    end
-
-    def is_last_line_empty?( string )
-      string.match(/^(.*)$\z/).nil? ? true : false
     end
 
     def load_aws_credentials

@@ -29,7 +29,7 @@ module CirrASManagement
 
     COMMANDS = {
             :running => {
-                    :default  => [ UpdatePeerIdCommand, UpdateProxyListCommand, UpdateJVMRouteCommand ]
+                    :all  => [ UpdatePeerIdCommand, UpdateProxyListCommand ]
             },
             :default  => [ UpdateGossipHostAddressCommand ],
             :ec2      => [ UpdateS3PingCredentialsCommand ]
@@ -45,6 +45,10 @@ module CirrASManagement
     end
 
     def execute
+      @log.debug "Executing default commands..."
+      execute_commands(COMMANDS[:all])
+      @log.debug "Default commands executed."
+
       @log.debug "Executing commands for #{@environment.to_s.upcase} environment..."
       execute_commands(COMMANDS[@environment])
       @log.debug "Commands for #{@environment.to_s.upcase} environment executed."
@@ -62,7 +66,7 @@ module CirrASManagement
       end
 
       @log.debug "Executing default commands (JBoss running)..."
-      execute_commands(COMMANDS[:running][:default])
+      execute_commands(COMMANDS[:running][:all])
       @log.debug "Default commands executed (JBoss running)."
 
       restart_jboss if @restart
@@ -73,7 +77,7 @@ module CirrASManagement
         @log.debug "Executing #{cmd}..."
         @restart = true if cmd.new( :log => @log, :mgmt_address => @mgmt_address ).execute
         @log.debug "Command #{cmd} executed."
-      end
+      end unless commands.nil?
     end
 
     def is_jboss_running?
