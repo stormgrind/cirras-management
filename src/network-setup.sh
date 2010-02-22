@@ -32,6 +32,4 @@ if [ "$address" == "" ]; then
     fi
 fi
 
-# start thin management
-cd /usr/share/cirras-management
-ruby thin -C config/config.yaml start
+service cirras-management start
