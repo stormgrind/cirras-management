@@ -3,16 +3,12 @@ require 'cirras-management/api/commands/update-rhq-agent-command'
 module CirrASManagement
   describe RHQAgentUpdateCommand do
 
-    before(:all) do
-      @log = Logger.new('/dev/null')
-    end
-
     before(:each) do
       Socket.should_receive(:gethostname).any_number_of_times.and_return("a-fancy-hostname")
     end
 
     def prepare_cmd( appliance_options = {} )
-      @cmd = RHQAgentUpdateCommand.new( appliance_options, { :log => @log } )
+      @cmd = RHQAgentUpdateCommand.new( appliance_options, { :log => Logger.new('/dev/null') } )
 
       @exec_helper    = @cmd.instance_variable_get(:@exec_helper)
       @ip_helper      = @cmd.instance_variable_get(:@ip_helper)

@@ -27,18 +27,10 @@ module CirrASManagement
     it "should execute commands for back-end appliance" do
       prepare_handler( "back-end" )
 
-      #@handler.should_receive(:is_jboss_running?).and_return(true)
-
       @handler.instance_variable_set(:@back_end_cmds_running, false)
 
-      jboss_command_factory = mock("JBossCommandFactory")
       JBossCommandFactory.should_receive(:new).with(:log => @log, :mgmt_address => "10.1.0.1", :environment => :default)
-
-
-
-      #UpdateProxyListCommand.should_receive(:new).with("10.1.0.1").once.and_return(proxy_list_command)
-      #UpdatePeerIdCommand.should_receive(:new).with("10.1.0.1").once.and_return(peer_id_command)
-      #UpdateJVMRouteCommand.should_receive(:new).with(no_args).once.and_return(jvm_route_command)
+      RHQAgentUpdateCommand.should_receive(:new).with(:appliance_name => "back-end", :management_appliance_address => "10.1.0.1")
 
       @handler.management_address_request("10.1.0.1")
     end
