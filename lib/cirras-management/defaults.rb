@@ -35,7 +35,7 @@ module CirrASManagement
   JBOSS_HOME              = "/opt/jboss-as6"
   JBOSS_SERVICE_NAME      = "jboss-as6"
   JBOSS_SYSCONFIG_FILE    = "/etc/sysconfig/jboss-as6"
-  BOXGRINDER_CONFIG_FILE  = "/etc/boxgrinder"
+  BOXGRINDER_CONFIG_FILE  = "/etc/sysconfig/boxgrinder"
   RACK_CONFIG_FILE        = "config/config.yaml"
   LEASES_FILE             = "/var/lib/dhcpd/dhcpd.leases"
   RHQ_AGENT_SYSCONF_FILE  = "/etc/sysconfig/rhq-agent"

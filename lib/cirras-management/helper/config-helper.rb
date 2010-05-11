@@ -31,10 +31,8 @@ module CirrASManagement
     end
 
     def config
-      boxgrinder_config   = load_yaml( @boxgrinder_config_file )
       rack_config         = load_yaml( @rack_config_file )
-
-      appliance_name      = boxgrinder_config['appliance_name']
+      appliance_name      = get_appliance_name
 
       Config.new(
               :running_on_ec2  => is_ec2?,
@@ -43,6 +41,10 @@ module CirrASManagement
               :node             => Node.new( appliance_name ),
               :appliance_name   => appliance_name
       )
+    end
+
+    def get_appliance_name
+      File.read( @boxgrinder_config_file ).scan(/^APPLIANCE_NAME=(.*)$/).to_s
     end
 
     def load_yaml( file )

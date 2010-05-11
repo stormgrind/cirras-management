@@ -1,7 +1,7 @@
 #/bin/sh
 
 address=`ip addr list eth0 | grep "inet " | cut -d' ' -f6 | cut -d/ -f1`
-appliance_name=`awk '{ print $2 }' /etc/boxgrinder`
+appliance_name=`awk -F= '{ print $2 }' /etc/sysconfig/boxgrinder`
 network_script="$0"
 
 if [ "$address" == "" ]; then
