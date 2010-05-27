@@ -18,7 +18,7 @@
 # Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 # 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
-require 'EC2'
+require 'AWS'
 require 'cirras-management/node/base-node-manager'
 
 module CirrASManagement
@@ -31,7 +31,7 @@ module CirrASManagement
       get_aws_data
       validate_aws_config
 
-      @ec2 = EC2::Base.new(:access_key_id => @aws_data['access_key'], :secret_access_key => @aws_data['secret_access_key'])
+      @ec2 = AWS::EC2::Base.new(:access_key_id => @aws_data['access_key'], :secret_access_key => @aws_data['secret_access_key'])
       # just for test if credentials are valid
       @ec2.describe_availability_zones
     end
