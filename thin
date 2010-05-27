@@ -2,7 +2,6 @@
 # Thin command line interface script.
 # Run <tt>thin -h</tt> to get more usage.
 
-require 'additional-libs'
 require 'rubygems'
 require 'thin'
 

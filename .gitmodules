@@ -1,9 +1,0 @@
-[submodule "lib/amazon-ec2"]
-	path = lib/amazon-ec2
-	url = git://github.com/grempe/amazon-ec2.git
-[submodule "lib/sinatra"]
-	path = lib/sinatra
-	url = git://github.com/sinatra/sinatra.git
-[submodule "lib/rest-client"]
-	path = lib/rest-client
-	url = git://github.com/adamwiggins/rest-client.git
