@@ -34,7 +34,7 @@ module CirrASManagement
 
     def twiddle_execute( command )
       @log.debug "Executing '#{command}' using Twiddle..."
-      out = @exec_helper.execute("#{JBOSS_HOME}/bin/twiddle.sh -s #{Socket.gethostname} #{command}")
+      out = @exec_helper.execute("#{JBOSS_HOME}/bin/twiddle.sh -s #{Socket.gethostname} -u admin -p admin #{command}")
       @log.debug "Command executed."
       out
     end
