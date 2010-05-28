@@ -31,5 +31,3 @@ if [ "$address" == "" ]; then
         exit       
     fi
 fi
-
-service cirras-management start
