@@ -47,6 +47,7 @@ module CirrASManagement
       unless (@current_gossip_host == @gossip_host)
         @log.info "Updating Gossip host to '#{@gossip_host}'..."
         @string_helper.update_config( @jboss_config, JBOSS_GOSSIP_HOST, @gossip_host )
+        File.open(JBOSS_SYSCONFIG_FILE, 'w') {|f| f.write(@jboss_config) }
         @log.debug "Gossip host updated."
 
         return true
