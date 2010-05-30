@@ -58,7 +58,7 @@ module CirrASManagement
       @log.info "Discovering if we're on EC2..."
 
       is_ec2 = false
-      is_ec2 = true unless @client_helper.get('http://169.254.169.254/latest/meta-data/local-ipv4').nil?
+      is_ec2 = true unless @client_helper.get('http://169.254.169.254/latest/meta-data/local-ipv4', true).nil?
 
       if is_ec2
         @log.info "We're on EC2!"

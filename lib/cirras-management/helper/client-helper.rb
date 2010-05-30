@@ -30,14 +30,19 @@ module CirrASManagement
       @log        = options[:log]       || Logger.new(STDOUT)
     end
 
-    def get( url )
+    def get( url, plain = false )
       @log.debug "GET: #{url}"
 
       t_current = Thread.current
       begin
         t_timer = Thread.new { sleep @timeout; t_current.raise "Timeout exceeded while getting information from url '#{url}'" }
 
-        data = YAML.load( Base64.decode64( RestClient.get( url ).to_s ))
+        raw = RestClient.get( url )
+
+        return raw if plain
+
+        base64_decoded  = Base64.decode64( raw.to_s )
+        data            = YAML.load( base64_decoded )
 
         return nil if data == false
         return data
