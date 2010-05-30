@@ -36,7 +36,7 @@ module CirrASManagement
       @addresses  = []
       @config     = config
 
-      @ip_helper      = IPHelper.new
+      @ip_helper      = IPHelper.new( :log => @log )
       @client_helper  = ClientHelper.new( { :log => @log } )
     end
 

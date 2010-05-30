@@ -125,7 +125,7 @@ module CirrASManagement
       t = Thread.new do
         while true do
           @log.info "Waiting for web server..."
-          break if IPHelper.new.is_port_open?( "localhost", @config.port )
+          break if IPHelper.new( :log => @log ).is_port_open?( "localhost", @config.port )
           sleep 1
         end
         @log.info "Web server is running and ready for requests!"
