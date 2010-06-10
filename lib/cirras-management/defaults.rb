@@ -38,7 +38,7 @@ module CirrASManagement
   BOXGRINDER_CONFIG_FILE  = "/etc/sysconfig/boxgrinder"
   RACK_CONFIG_FILE        = "config/config.yaml"
   LEASES_FILE             = "/var/lib/dhcpd/dhcpd.leases"
-  RHQ_AGENT_SYSCONF_FILE  = "/etc/sysconfig/rhq-agent"
+  RHQ_AGENT_SYSCONF_FILE  = "/etc/sysconfig/jon-agent"
 
   LOG_DEFAULT_FILE        = "/var/log/cirras-management/default.log"
   LOG_WEB_FILE            = "/var/log/cirras-management/web.log"
