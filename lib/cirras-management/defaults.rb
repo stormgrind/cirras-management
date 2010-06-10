@@ -32,9 +32,9 @@ module CirrASManagement
 
   DEFAULT_FRONT_END_PORT  = 80
   MANAGEMENT_PORT         = 4545
-  JBOSS_HOME              = "/opt/jboss-eap-5.0.1/jboss-as"
-  JBOSS_SERVICE_NAME      = "jboss-eap"
-  JBOSS_SYSCONFIG_FILE    = "/etc/sysconfig/jboss-eap"
+  JBOSS_HOME              = "/opt/jboss-as6"
+  JBOSS_SERVICE_NAME      = "jboss-as6"
+  JBOSS_SYSCONFIG_FILE    = "/etc/sysconfig//jboss-as6"
   BOXGRINDER_CONFIG_FILE  = "/etc/sysconfig/boxgrinder"
   RACK_CONFIG_FILE        = "config/config.yaml"
   LEASES_FILE             = "/var/lib/dhcpd/dhcpd.leases"
