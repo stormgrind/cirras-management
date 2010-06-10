@@ -105,7 +105,7 @@ module CirrASManagement
       @log.info "Restarting RHQ Agent..."
 
       begin
-        @exec_helper.execute "service rhq-agent restart --update"
+        @exec_helper.execute "service jon-agent restart --update"
         @log.info "RHQ Agent successfully restarted."
         return true
       rescue => e
