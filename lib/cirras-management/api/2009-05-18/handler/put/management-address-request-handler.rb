@@ -57,13 +57,10 @@ module CirrASManagement
             end
         end
 
-        if @management_address != management_appliance_address
+        if @management_address.nil? or @management_address != management_appliance_address
           @management_address = management_appliance_address
 
-          RHQAgentUpdateCommand.new(
-                  :appliance_name => @config.appliance_name,
-                  :management_appliance_address => @management_address
-          ).execute
+          RHQAgentUpdateCommand.new( { :appliance_name => @config.appliance_name, :management_appliance_address => @management_address }, :log => @log ).execute
         end
       rescue => e
         @log.error "Something bad happened, but it shouldn't..."
