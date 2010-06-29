@@ -25,7 +25,7 @@ module CirrASManagement
 
       inject_peer_id_1
 
-      @exec_helper.should_receive(:execute).with( "#{@jboss_home}/bin/twiddle.sh -s localhost -u admin -p admin get jboss.messaging:service=ServerPeer ServerPeerID" ).once.and_return("xyz")
+      @exec_helper.should_receive(:execute).with( "#{@jboss_home}/bin/twiddle.sh -o localhost -u admin -p admin get jboss.messaging:service=ServerPeer ServerPeerID" ).once.and_return("xyz")
       @exec_helper.should_not_receive(:execute)
       @cmd.execute
     end
@@ -35,7 +35,7 @@ module CirrASManagement
 
       inject_peer_id_1
 
-      @exec_helper.should_receive(:execute).with( "#{@jboss_home}/bin/twiddle.sh -s localhost -u admin -p admin get jboss.messaging:service=ServerPeer ServerPeerID" ).once.and_return("ServerPeerID=xyz")
+      @exec_helper.should_receive(:execute).with( "#{@jboss_home}/bin/twiddle.sh -o localhost -u admin -p admin get jboss.messaging:service=ServerPeer ServerPeerID" ).once.and_return("ServerPeerID=xyz")
       @exec_helper.should_not_receive(:execute)
       @cmd.execute
     end
@@ -45,7 +45,7 @@ module CirrASManagement
 
       @cmd.instance_variable_set(:@peer_id, "1")
 
-      @exec_helper.should_receive(:execute).with( "#{@jboss_home}/bin/twiddle.sh -s localhost -u admin -p admin get jboss.messaging:service=ServerPeer ServerPeerID" ).once.and_return("ServerPeerID=1")
+      @exec_helper.should_receive(:execute).with( "#{@jboss_home}/bin/twiddle.sh -o localhost -u admin -p admin get jboss.messaging:service=ServerPeer ServerPeerID" ).once.and_return("ServerPeerID=1")
       @exec_helper.should_not_receive(:execute)
 
       @cmd.execute
@@ -56,7 +56,7 @@ module CirrASManagement
 
       inject_peer_id_1
 
-      @exec_helper.should_receive(:execute).with( "#{@jboss_home}/bin/twiddle.sh -s localhost -u admin -p admin get jboss.messaging:service=ServerPeer ServerPeerID" ).once.and_return("ServerPeerID=2")
+      @exec_helper.should_receive(:execute).with( "#{@jboss_home}/bin/twiddle.sh -o localhost -u admin -p admin get jboss.messaging:service=ServerPeer ServerPeerID" ).once.and_return("ServerPeerID=2")
       @exec_helper.should_not_receive(:execute)
       @cmd.execute
     end
@@ -81,9 +81,9 @@ module CirrASManagement
     def inject_peer_id_1
       @cmd.instance_variable_set(:@peer_id, "1")
 
-      @exec_helper.should_receive(:execute).with( "#{@jboss_home}/bin/twiddle.sh -s localhost -u admin -p admin invoke jboss.messaging:service=ServerPeer stop" ).once
-      @exec_helper.should_receive(:execute).with( "#{@jboss_home}/bin/twiddle.sh -s localhost -u admin -p admin set jboss.messaging:service=ServerPeer ServerPeerID 1" ).once
-      @exec_helper.should_receive(:execute).with( "#{@jboss_home}/bin/twiddle.sh -s localhost -u admin -p admin invoke jboss.messaging:service=ServerPeer start" ).once
+      @exec_helper.should_receive(:execute).with( "#{@jboss_home}/bin/twiddle.sh -o localhost -u admin -p admin invoke jboss.messaging:service=ServerPeer stop" ).once
+      @exec_helper.should_receive(:execute).with( "#{@jboss_home}/bin/twiddle.sh -o localhost -u admin -p admin set jboss.messaging:service=ServerPeer ServerPeerID 1" ).once
+      @exec_helper.should_receive(:execute).with( "#{@jboss_home}/bin/twiddle.sh -o localhost -u admin -p admin invoke jboss.messaging:service=ServerPeer start" ).once
     end
   end
 end

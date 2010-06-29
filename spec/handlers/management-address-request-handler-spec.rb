@@ -11,7 +11,7 @@ module CirrASManagement
       RHQAgentUpdateCommand.should_receive(:new).with({
               :appliance_name => "front-end",
               :management_appliance_address => "10.1.0.1"
-      }).once
+      }, {:log => @log}).once
 
       @handler.management_address_request("10.1.0.1")
     end
@@ -30,7 +30,7 @@ module CirrASManagement
       @handler.instance_variable_set(:@back_end_cmds_running, false)
 
       JBossCommandFactory.should_receive(:new).with(:log => @log, :mgmt_address => "10.1.0.1", :environment => :default)
-      RHQAgentUpdateCommand.should_receive(:new).with(:appliance_name => "back-end", :management_appliance_address => "10.1.0.1")
+      RHQAgentUpdateCommand.should_receive(:new).with({:appliance_name => "back-end", :management_appliance_address => "10.1.0.1"}, {:log => @log})
 
       @handler.management_address_request("10.1.0.1")
     end
