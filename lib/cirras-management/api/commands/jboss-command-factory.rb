@@ -20,7 +20,6 @@
 
 require 'cirras-management/api/commands/update-proxy-list-command'
 require 'cirras-management/api/commands/update-gossip-host-address-command'
-require 'cirras-management/api/commands/update-peer-id-command'
 require 'cirras-management/api/commands/update-s3ping-credentials-command'
 
 module CirrASManagement
@@ -28,7 +27,7 @@ module CirrASManagement
 
     COMMANDS = {
             :running => {
-                    :all  => [ UpdatePeerIdCommand, UpdateProxyListCommand ]
+                    :all  => [ UpdateProxyListCommand ]
             },
             :default  => [ UpdateGossipHostAddressCommand ],
             :ec2      => [ UpdateS3PingCredentialsCommand ]
