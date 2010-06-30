@@ -1,8 +1,11 @@
 require 'cirras-management/api/2009-05-18/handler/put/management-address-request-handler'
 require 'cirras-management/model/handler-to'
 require 'cirras-management/model/config'
+require 'rspec-helpers/rspec-config-helper'
 
 module CirrASManagement
+  include RSpecConfigHelper
+
   describe ManagementAddressRequestHandler do
 
     it "should execute commands for front-end appliance" do
@@ -40,8 +43,8 @@ module CirrASManagement
       @log = Logger.new('/dev/null')
 
       config_helper = ConfigHelper.new(
-              :rack_config_file => "src/config.yml",
-              :boxgrinder_config_file => "src/etc/boxgrinder-#{appliance_name}-appliance",
+              :rack_config_file => "#{RSpecConfigHelper::RSPEC_BASE_LOCATION}/src/config.yml",
+              :boxgrinder_config_file => "#{RSpecConfigHelper::RSPEC_BASE_LOCATION}/src/etc/boxgrinder-#{appliance_name}-appliance",
               :log => @log )
 
       config_helper.stub!(:is_ec2?).and_return(false)
