@@ -21,6 +21,7 @@
 require 'yaml'
 require 'base64'
 require 'logger'
+require 'rubygems'
 require 'restclient'
 
 module CirrASManagement
