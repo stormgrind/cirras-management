@@ -1,3 +1,5 @@
+require 'logger'
+
 Logger.const_set(:TRACE, 0)
 Logger.const_set(:DEBUG, 1)
 Logger.const_set(:INFO, 2)
