@@ -38,12 +38,17 @@ module CirrASManagement
       @log              = options[:log]           || Logger.new(STDOUT)
       @exec_helper      = options[:exec_helper]   || ExecHelper.new( { :log => @log } )
       @ip_helper        = options[:ip_helper]     || IPHelper.new( { :log => @log } )
+      @string_helper    = options[:string_helper] || StringHelper.new( { :log => @log } )
       @mgmt_address     = options[:mgmt_address]
       @environment      = options[:environment]
       @restart          = false
     end
 
     def execute
+      @jboss_config = File.read(JBOSS_SYSCONFIG_FILE)
+      @string_helper.update_config( @jboss_config, 'MANAGEMENT_IP', @mgmt_address )
+      File.open(JBOSS_SYSCONFIG_FILE, 'w') {|f| f.write( @jboss_config ) }
+
       @log.debug "Executing default commands..."
       execute_commands(COMMANDS[:all])
       @log.debug "Default commands executed."

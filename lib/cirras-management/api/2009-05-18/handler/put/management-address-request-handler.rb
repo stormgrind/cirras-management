@@ -21,6 +21,7 @@
 require 'cirras-management/api/2009-05-18/handler/base-request-handler'
 require 'cirras-management/helper/log-helper'
 require 'cirras-management/helper/client-helper'
+require 'cirras-management/helper/string-helper'
 require 'cirras-management/api/commands/update-rhq-agent-command'
 require 'cirras-management/api/commands/jboss-command-factory'
 
